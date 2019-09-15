@@ -3,7 +3,7 @@ module CypressRails
     def call(dir:, port:)
       require "capybara"
       require "selenium-webdriver"
-      Capybara.server_port = port
+      Capybara.server_port = port || find_available_port
       Capybara.always_include_port = true
 
       Capybara.server = :puma, {Silent: false}
@@ -26,6 +26,15 @@ module CypressRails
       ActionDispatch::SystemTesting::Server.new.run
 
       Capybara.current_session
+    end
+
+    private
+
+    def find_available_port
+      server = TCPServer.new(Capybara.server_host, 0)
+      server.addr[1]
+    ensure
+      server&.close
     end
   end
 end

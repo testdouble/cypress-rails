@@ -8,7 +8,7 @@ module CypressRails
       @finds_bin = FindsBin.new
     end
 
-    def call(dir: Dir.pwd, port: ENV["RAILS_CYPRESS_PORT"] || 3030)
+    def call(dir: Dir.pwd, port: ENV["RAILS_CYPRESS_PORT"])
       @starts_rails_server.call(dir: dir, port: port)
       bin = @finds_bin.call(dir)
 
