@@ -1,13 +1,11 @@
-require "pathname"
-
 module CypressRails
-  DEFAULT_CONFIG = {
-    "screenshotsFolder" => "tmp/cypress_screenshots",
-    "videosFolder" => "tmp/cypress_videos",
-    "trashAssetsBeforeRuns" => false,
-  }
-
   class Init
+    DEFAULT_CONFIG = {
+      "screenshotsFolder" => "tmp/cypress_screenshots",
+      "videosFolder" => "tmp/cypress_videos",
+      "trashAssetsBeforeRuns" => false,
+    }
+
     def call(dir = Dir.pwd)
       config_path = File.join(dir, "cypress.json")
       json = JSON.pretty_generate(determine_new_config(config_path))

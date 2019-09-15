@@ -4,4 +4,5 @@ module CypressRails
 end
 
 require "cypress-rails/init"
+require "cypress-rails/open"
 require "cypress-rails/railtie" if defined?(Rails)
