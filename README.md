@@ -1,39 +1,55 @@
-# Cypress::Rails
+# cypress-rails
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/cypress/rails`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This is a simple gem to make it easier to start writing browser tests with
+[Cypress](http://cypress.io) for your Rails apps, regardless of whether your app
+is server-side rendered HTML, completely client-side JavaScript, or something in
+between.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+tl;dr:
 
-```ruby
-gem 'cypress-rails'
+1. Install the npm package `cypress`
+2. Install this gem `cypress-rails`
+3. Run `rake cypress:init`
+
+### Installing Cypress itself
+
+The first step is making sure Cypress is installed (that's up to you, this
+library doesn't install Cypress, it just provides a little Rails specific glue).
+
+If you're on newer versions of Rails and using
+[webpacker](https://www.github.com/rails/webpacker) for your front-end assets,
+then you're likely already using yarn to manage your JavaScript dependencies. If
+that's the case, you can add Cypress with:
+
+```
+$ yarn add --dev cypress
 ```
 
-And then execute:
+If you're not using yarn in conjunction with your Rails app, check out the
+Cypress docs on getting it installed. At the end of the day, this gem just needs
+the `cypress` binary to exist someplace it can find.
 
-    $ bundle
+### Installing the cypress-rails gem
 
-Or install it yourself as:
+Now, to install the cypress-rails gem, you'll want to add it to your development
+& test gem groups of your Gemfile, so that you have easy access to its rake
+tasks:
 
-    $ gem install cypress-rails
+``` ruby
+group :development, :test do
+  gem "cypress-rails"
+end
+```
 
-## Usage
+Once installed, you'll want to run:
 
-TODO: Write usage instructions here
+```
+$ bin/rake cypress:init
+```
 
-## Development
+This will override a few configurations in your `cypress.json` configuration
+file.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/searls/cypress-rails.
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
