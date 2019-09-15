@@ -1,12 +1,12 @@
 module CypressRails
   class StartsRailsServer
     def call(dir:, port:)
-      Rails.env = "test"
-      require "rails/test_help"
       require "capybara"
       require "selenium-webdriver"
       Capybara.server_port = port
-      Capybara.server = :puma, {Silent: true}
+      Capybara.always_include_port = true
+
+      Capybara.server = :puma, {Silent: false}
 
       require "action_dispatch/system_testing/driver"
       require "action_dispatch/system_testing/browser"

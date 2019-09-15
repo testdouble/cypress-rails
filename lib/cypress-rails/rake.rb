@@ -1,11 +1,17 @@
+require "pathname"
+CLI = Pathname.new(File.dirname(__FILE__)).join("../../exe/cypress-rails")
+
 desc "Initialize cypress.json"
 task :"cypress:init" do
-  require "cypress-rails"
-  CypressRails::Init.new.call
+  system "#{CLI} init"
 end
 
 desc "Open interactive Cypress app for developing tests"
-task "cypress:open": [:environment] do
-  require "cypress-rails"
-  CypressRails::Open.new.call
+task :"cypress:open" do
+  system "#{CLI} open"
+end
+
+desc "Run Cypress tests headlessly"
+task :"cypress:run" do
+  system "#{CLI} run"
 end

@@ -5,4 +5,5 @@ end
 
 require "cypress-rails/init"
 require "cypress-rails/open"
+require "cypress-rails/run"
 require "cypress-rails/railtie" if defined?(Rails)
