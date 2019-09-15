@@ -1,3 +1,4 @@
+require "rails/railtie"
 require "pathname"
 
 module CypressRails

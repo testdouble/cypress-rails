@@ -1,3 +1,5 @@
+require "action_dispatch/system_test_case"
+
 require_relative "configures_test_server"
 
 module CypressRails
