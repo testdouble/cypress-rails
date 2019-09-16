@@ -1,3 +1,11 @@
+PATH
+  remote: ../..
+  specs:
+    cypress-rails (0.0.1)
+      capybara
+      railties (>= 5.2.0)
+      selenium-webdriver
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -176,6 +184,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   capybara (>= 2.15)
+  cypress-rails!
   jbuilder (~> 2.7)
   puma (~> 3.11)
   rails (~> 6.0.0)
