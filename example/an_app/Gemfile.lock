@@ -56,11 +56,9 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
       zeitwerk (~> 2.1, >= 2.1.8)
-    bindex (0.8.1)
     bootsnap (1.4.5)
       msgpack (~> 1.0)
     builder (3.2.3)
-    byebug (11.0.1)
     concurrent-ruby (1.1.5)
     crass (1.0.4)
     erubi (1.8.0)
@@ -68,8 +66,6 @@ GEM
       activesupport (>= 4.2.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
-    jbuilder (2.9.1)
-      activesupport (>= 4.2.0)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -131,11 +127,6 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
-    web-console (4.0.1)
-      actionview (>= 6.0.0)
-      activemodel (>= 6.0.0)
-      bindex (>= 0.4.0)
-      railties (>= 6.0.0)
     webpacker (4.0.7)
       activesupport (>= 4.2)
       rack-proxy (>= 0.6.1)
@@ -150,13 +141,9 @@ PLATFORMS
 
 DEPENDENCIES
   bootsnap (>= 1.4.2)
-  byebug
-  jbuilder (~> 2.7)
   puma (~> 3.11)
   rails (~> 6.0.0)
   sqlite3 (~> 1.4)
-  tzinfo-data
-  web-console (>= 3.3.0)
   webpacker (~> 4.0)
 
 RUBY VERSION
