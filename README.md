@@ -176,14 +176,18 @@ tests need, as well as specifying custom `setup` and `teardown` directives.
 Each Cypress file matched by the `test_locator` is translated to a single test
 case, which—while slightly inefficient, as it spools Cypress up and down
 multiple times—also makes it easy to handle each Cypress file as you would any
-other Ruby test. It also allows for CLI usage like this:
+other Ruby test. It also allows for CLI usage like this (where the test name is
+an expansion of the file location with the path separators replaced with `_`):
 
 ```
 $ bin/rails test test/system --name test_cypress_integration_send_invoice_js
 ```
 
-(Where the test name is an expansion of the file location with the path
-separators replaced with `_`.)
+**WARNING**: keep in mind that any custom Ruby code you add before or after each
+Cypress test is run in the context of a `CypressRails::TestCase` will _not_ be
+run when developing with `cypress open`! That means this is probably not the
+most rock-solid strategy for consistent test behavior when it comes to things
+like test data management.
 
 ### Setting up continuous integration
 
