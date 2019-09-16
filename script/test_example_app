@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+
+directory=$1
+
+cd example/an_app
+bundle
+yarn install
+bundle exec rake cypress:run
