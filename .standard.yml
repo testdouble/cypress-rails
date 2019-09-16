@@ -1,0 +1,2 @@
+ignore:
+  - 'example/an_app/node_modules/**/*'
