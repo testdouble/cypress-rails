@@ -38,8 +38,8 @@ jobs:
             - v1-yarn-
 
       - run: |
-        cd example/an_app
-        yarn install
+          cd example/an_app
+          yarn install
 
       - save_cache:
           paths:
