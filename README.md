@@ -1,5 +1,7 @@
 # cypress-rails
 
+[![CircleCI](https://circleci.com/gh/testdouble/cypress-rails/tree/master.svg?style=svg)](https://circleci.com/gh/testdouble/cypress-rails/tree/master)
+
 This is a simple gem to make it easier to start writing browser tests with
 [Cypress](http://cypress.io) for your [Rails](https://rubyonrails.org) apps,
 regardless of whether your app is server-side rendered HTML, completely
