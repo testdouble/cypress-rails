@@ -45,7 +45,7 @@ jobs:
           paths:
             - example/an_app/node_modules
             - ~/.cache
-          key: v1-dependencies-{{ checksum "example/an_app/package.json" }}
+          key: v1-yarn-{{ checksum "example/an_app/package.json" }}
 
       - run: bundle exec rake
       - run: ./script/test_example_app
