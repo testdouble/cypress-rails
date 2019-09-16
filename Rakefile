@@ -8,4 +8,9 @@ Rake::TestTask.new(:test) do |t|
   t.test_files = FileList["test/**/*_test.rb"]
 end
 
-task default: [:test, "standard:fix"]
+desc "run cypress tests in an example app"
+task :test_example_app do
+  sh "script/test_example_app"
+end
+
+task default: [:test, "standard:fix", :test_example_app]
