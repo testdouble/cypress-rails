@@ -1,0 +1,52 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.6-node-browsers
+    steps:
+      - checkout
+
+      # Bundle install dependencies
+      - type: cache-restore
+        key: v1-main-{{ checksum "Gemfile.lock" }}
+
+      - run: bundle install --path vendor/bundle
+
+      - type: cache-save
+        key: v1-main-{{ checksum "Gemfile.lock" }}
+        paths:
+          - vendor/bundle
+
+      # Bundle install dependencies for example app
+      - type: cache-restore
+        key: v1-example-{{ checksum "example/an_app/Gemfile.lock" }}
+
+      - run: |
+          cd example/an_app
+          bundle install --path vendor/bundle
+
+      - type: cache-save
+        key: v1-example-{{ checksum "example/an_app/Gemfile.lock" }}
+        paths:
+          - example/an_app/vendor/bundle
+
+      # Yarn dependencies
+      - restore_cache:
+          keys:
+            - v1-yarn-{{ checksum "example/an_app/package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-yarn-
+
+      - run: |
+        cd example/an_app
+        yarn install
+
+      - save_cache:
+          paths:
+            - example/an_app/node_modules
+            - ~/.cache
+          key: v1-dependencies-{{ checksum "example/an_app/package.json" }}
+
+      - run: bundle exec rake
+      - run: ./script/test_example_app
+
