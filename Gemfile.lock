@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cypress-rails (0.0.1)
+    cypress-rails (0.0.2)
       capybara
       railties (>= 5.2.0)
       selenium-webdriver
