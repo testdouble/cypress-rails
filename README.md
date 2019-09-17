@@ -182,7 +182,7 @@ other Ruby test. It also allows for CLI usage like this (where the test name is
 an expansion of the file location with the path separators replaced with `_`):
 
 ```
-$ bin/rails test test/system --name test_cypress_integration_send_invoice_js
+$ rails test test/system --name test_cypress_integration_send_invoice_js
 ```
 
 **WARNING**: keep in mind that any custom Ruby code you add before or after each
