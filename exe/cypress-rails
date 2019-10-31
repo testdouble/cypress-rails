@@ -6,7 +6,7 @@ require Pathname.new(Dir.pwd).join("config/environment")
 require "cypress-rails"
 
 command = ARGV[0]
-case command
+result = case command
 when "init"
   CypressRails::Init.new.call
 when "open"
@@ -14,3 +14,6 @@ when "open"
 when "run"
   CypressRails::Run.new.call
 end
+
+exit 1 if !result
+exit 0
