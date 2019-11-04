@@ -13,5 +13,5 @@ end
 
 desc "Run Cypress tests headlessly"
 task :"cypress:run" do
-  abort "Tests failed" unless system "#{CLI} run"
+  abort unless system "#{CLI} run"
 end
