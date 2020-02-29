@@ -155,6 +155,15 @@ Or, with rake:
 $ rake cypress:run
 ```
 
+### Pass options to cypress run or open
+
+Options can be provided to `cypress run` and `cypress open` using the 
+CYPRESS_OPTS environment variable
+
+```
+CYPRESS_OPTS="--record --key=abc123 --parallel" rake cypress:run
+```
+
 ### Write Ruby tests that wrap and invoke your cypress tests
 
 You can also extend a provided `CypressRails::TestCase`, which itself inherits
