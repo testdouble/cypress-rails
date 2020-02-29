@@ -8,3 +8,4 @@ cd example/an_app
 bundle
 yarn install
 bundle exec rake cypress:run
+bundle exec rake cypress:run --execute-print 'puts "test that includes passing cypress opts"'
