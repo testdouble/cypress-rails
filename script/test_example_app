@@ -8,4 +8,8 @@ cd example/an_app
 bundle
 yarn install
 bundle exec rake cypress:run
-bundle exec rake cypress:run --execute-print 'puts "test that includes passing cypress opts"'
+
+if ! CYPRESS_OPTS="-h" bundle exec rake cypress:run | grep -q "Usage: run \[options\]"; then
+  echo "Failed to pass options to cypress:run"
+  exit 1
+fi
