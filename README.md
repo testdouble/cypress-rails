@@ -158,10 +158,10 @@ $ rake cypress:run
 ### Pass options to cypress run or open
 
 Options can be provided to `cypress run` and `cypress open` using the
-`CYPRESS_OPTS` environment variable
+`RAILS_CYPRESS_CLI_OPTS` environment variable
 
 ```
-rake cypress:run CYPRESS_OPTS="--record --key=abc123 --parallel"
+rake cypress:run RAILS_CYPRESS_CLI_OPTS="--record --key=abc123 --parallel"
 ```
 
 ### Write Ruby tests that wrap and invoke your cypress tests
@@ -257,3 +257,5 @@ You can change the behavior of this gem by setting these environment variables:
 
 * **RAILS_CYPRESS_PORT**: the port to run the Rails test server on (defaults to
   a random available port
+* **RAILS_CYPRESS_CLI_OPTS**: any options you want to forward to the Cypress
+  CLI when running its `open` or `run` commands

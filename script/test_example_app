@@ -12,7 +12,7 @@ yarn install
 bundle exec rake cypress:run
 
 # test that passing options works (by printing help)
-if ! bundle exec rake cypress:run CYPRESS_OPTS="-h" | grep -q "Usage: run \[options\]"; then
+if ! bundle exec rake cypress:run RAILS_CYPRESS_CLI_OPTS="-h" | grep -q "Usage: run \[options\]"; then
   echo "Failed to pass options to cypress run"
   exit 1
 fi
