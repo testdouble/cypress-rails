@@ -158,10 +158,10 @@ $ rake cypress:run
 ### Pass options to cypress run or open
 
 Options can be provided to `cypress run` and `cypress open` using the
-`RAILS_CYPRESS_CLI_OPTS` environment variable
+`CYPRESS_RAILS_CYPRESS_OPTS` environment variable
 
 ```
-rake cypress:run RAILS_CYPRESS_CLI_OPTS="--record --key=abc123 --parallel"
+CYPRESS_RAILS_CYPRESS_OPTS="--record --key=abc123 --parallel" rake cypress:run
 ```
 
 ### Write Ruby tests that wrap and invoke your cypress tests
@@ -253,9 +253,19 @@ jobs:
 
 ## Configuration
 
-You can change the behavior of this gem by setting these environment variables:
+The cypress-rails gem is configured entirely via environment variables. If you
+find yourself repeating a number of verbose environment variables as you run
+your tests, consider invoking the gem from a a custom script or setting your
+preferred environment variables project-wide using a tool like
+[dotenv](https://github.com/bkeepers/dotenv).
 
-* **RAILS_CYPRESS_PORT**: the port to run the Rails test server on (defaults to
-  a random available port
-* **RAILS_CYPRESS_CLI_OPTS**: any options you want to forward to the Cypress
-  CLI when running its `open` or `run` commands
+
+* **CYPRESS_RAILS_DIR** (default: `Dir.pwd`) the directory of your project
+* **CYPRESS_RAILS_PORT** (default: _a random available port_) the port to run
+  the Rails test server on
+* **CYPRESS_RAILS_TRANSACTIONAL_SERVER** (default: `true`) when true, will start
+  a transaction on all database connections immediately after launching the
+  server. In general this means anything done during `cypress open` or `cypress
+  run` will be rolled back on exit (similar to running a Rails System test)
+* **CYPRESS_RAILS_CYPRESS_OPTS** (default: _none_) any options you want to
+  forward to the Cypress CLI when running its `open` or `run` commands

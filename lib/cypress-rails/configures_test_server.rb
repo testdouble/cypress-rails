@@ -1,6 +1,6 @@
 module CypressRails
   class ConfiguresTestServer
-    def call(port: ENV["RAILS_CYPRESS_PORT"])
+    def call(port:)
       require "capybara"
       require "selenium-webdriver"
       Capybara.server_port = port || find_available_port
