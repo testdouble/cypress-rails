@@ -3,7 +3,7 @@ module CypressRails
     DEFAULT_CONFIG = {
       "screenshotsFolder" => "tmp/cypress_screenshots",
       "videosFolder" => "tmp/cypress_videos",
-      "trashAssetsBeforeRuns" => false,
+      "trashAssetsBeforeRuns" => false
     }
 
     def call(dir = Dir.pwd)
