@@ -129,16 +129,16 @@ So, by running either:
 $ cypress-rails open
 ```
 
-Or, if you don't mind the extra cost of loading rake just so it can call
-`system`:
+Or:
 
 ```
 $ rake cypress:open
 ```
 
-Add tests to `cypress/integration`. Simply click a test file in the Cypress
-application window to launch the test in a browser. Each time you save the test
-file, it will re-run itself.
+Any JavaScript files added to `cypress/integration` will be identified by
+Cypress as tests. Simply click a test file in the Cypress application window to
+launch the test in a browser. Each time you save the test file, it will re-run
+itself.
 
 ### Run tests headlessly with `cypress run`
 
@@ -155,50 +155,116 @@ Or, with rake:
 $ rake cypress:run
 ```
 
-### Pass options to cypress run or open
+## Managing your test data
 
-Options can be provided to `cypress run` and `cypress open` using the
-`CYPRESS_OPTS` environment variable
+The tricky thing about browser tests is that they usually depend on some test
+data being available with which to exercise the app efficiently. Because cypress
+is a JavaScript-based tool and can't easily manipulate your Rails app directly,
+cypress-rails provides a number of hooks that you can use to manage your test
+data.
 
-```
-rake cypress:run CYPRESS_OPTS="--record --key=abc123 --parallel"
-```
-
-### Write Ruby tests that wrap and invoke your cypress tests
-
-You can also extend a provided `CypressRails::TestCase`, which itself inherits
-from Rails' built-in `ActionDispatch::SystemTestCase`.
-
-That means you can add a test named `test/system/cypress_test.rb`:
+Here's what a `config/initializers/cypress_rails.rb` initializer might look
+like:
 
 ```ruby
-require "test_helper"
+return unless Rails.env.test?
 
-class CypressTest < CypressRails::TestCase
-  test_locator "cypress/integration/**/*.js"
+CypressRails.hooks.before_server_start do
+  # Called once, before ether the transaction or the server is started
+end
+
+CypressRails.hooks.after_transaction_start do
+  # Called after the transaction is started (at launch and after each reset)
+end
+
+CypressRails.hooks.after_state_reset do
+  # Triggered after `/cypress_rails_reset_state` is called
+end
+
+CypressRails.hooks.before_server_stop do
+  # Called once, at_exit
 end
 ```
 
-And it will run alongside all the rest of your system tests. Because this would
-be invoked by your existing test scripts, you can benefit from whatever custom
-test helpers (e.g. database setup, test coverage, etc.) your other full-stack
-tests need, as well as specifying custom `setup` and `teardown` directives.
+(You can find [an
+example
+initializer](/example/an_app/config/initializers/cypress_rails_initializer.rb)
+in this repo.)
 
-Each Cypress file matched by the `test_locator` is translated to a single test
-case, which—while slightly inefficient, as it spools Cypress up and down
-multiple times—also makes it easy to handle each Cypress file as you would any
-other Ruby test. It also allows for CLI usage like this (where the test name is
-an expansion of the file location with the path separators replaced with `_`):
+The gem also provides a special route on the test server:
+`/cypress_rails_reset_state`. Each time it's called, cypress-rails will do
+two things at the beginning of the next request received by the Rails app:
 
+* If `CYPRESS_RAILS_TRANSACTIONAL_SERVER` is enabled, roll back the transaction,
+effectively resetting the application state to whatever it was at the start of
+the test run
+
+* Trigger any `after_state_reset` hooks you've configured (regardless of the
+  transactional server setting)
+
+This way, you can easily instruct the server to reset its test state from your
+Cypress tests like so:
+
+```js
+beforeEach(() =>
+  cy.request('/cypress_rails_reset_state')
+)
 ```
-$ rails test test/system --name test_cypress_integration_send_invoice_js
-```
 
-**WARNING**: keep in mind that any custom Ruby code you add before or after each
-Cypress test is run in the context of a `CypressRails::TestCase` will _not_ be
-run when developing with `cypress open`! That means this is probably not the
-most rock-solid strategy for consistent test behavior when it comes to things
-like test data management.
+(Remember, in Cypress, `before` is a before-all hook and `beforeEach` is run
+between each test case!)
+
+## Configuration
+
+### Environment variables
+
+The cypress-rails gem is configured entirely via environment variables. If you
+find yourself repeating a number of verbose environment variables as you run
+your tests, consider invoking the gem from a custom script or setting your
+preferred environment variables project-wide using a tool like
+[dotenv](https://github.com/bkeepers/dotenv).
+
+
+* **CYPRESS_RAILS_DIR** (default: `Dir.pwd`) the directory of your project
+* **CYPRESS_RAILS_PORT** (default: _a random available port_) the port to run
+  the Rails test server on
+* **CYPRESS_RAILS_TRANSACTIONAL_SERVER** (default: `true`) when true, will start
+  a transaction on all database connections before launching the server. In
+  general this means anything done during `cypress open` or `cypress run` will
+  be rolled back on exit (similar to running a Rails System test)
+* **CYPRESS_RAILS_CYPRESS_OPTS** (default: _none_) any options you want to
+  forward to the Cypress CLI when running its `open` or `run` commands
+
+### Initializer hooks
+
+### before_server_start
+
+Pass a block to `CypressRails.hooks.before_server_start` to register a hook that
+will execute before the server or any transaction has been started. If you use
+Rails fixtures, it may make sense to load them here, so they don't need to be
+re-inserted for each request
+
+### after_transaction_start
+
+If there's any custom behavior or state management you want to do inside the
+transaction (so that it's also rolled back each time a reset is triggered),
+pass a block to `CypressRails.hooks.after_transaction_start`.
+
+### after_state_reset
+
+Every time the test server receives an HTTP request at
+`/cypress_rails_reset_state`, the transaction will be rolled back (if
+`CYPRESS_RAILS_TRANSACTIONAL_SERVER` is enabled) and the `after_state_reset`
+hook will be triggered. To set up the hook, pass a block to
+`CypressRails.hooks.after_state_reset`.
+
+### before_server_stop
+
+In case you've made any permanent changes to your test database that could
+pollute other test suites or scripts, you can use the `before_server_stop` to
+(assuming everything exits gracefully) clean things up and restore the state
+of your test database. To set up the hook, pass a block to
+`CypressRails.hooks.before_server_stop`.
 
 ### Setting up continuous integration
 
@@ -251,9 +317,3 @@ jobs:
       - run: bin/rake cypress:run
 ```
 
-## Configuration
-
-You can change the behavior of this gem by setting these environment variables:
-
-* **RAILS_CYPRESS_PORT**: the port to run the Rails test server on (defaults to
-  a random available port
