@@ -7,6 +7,14 @@ This is a simple gem to make it easier to start writing browser tests with
 regardless of whether your app is server-side rendered HTML, completely
 client-side JavaScript, or something in-between.
 
+## Installation
+
+**tl;dr**:
+
+1. Install the npm package `cypress`
+2. Install this gem `cypress-rails`
+3. Run `rake cypress:init`
+
 ### Installing Cypress itself
 
 The first step is making sure Cypress is installed (that's up to you, this
@@ -297,12 +305,5 @@ adopting Cypress and writing a bunch of browser tests for every application.
 But, if the above points sound like solutions to problems you experience, you
 might consider trying it out.
 
-## Installation
-
-**tl;dr**:
-
-1. Install the npm package `cypress`
-2. Install this gem `cypress-rails`
-3. Run `rake cypress:init`
 
 
