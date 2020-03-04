@@ -25,6 +25,9 @@ module CypressRails
       )
       bin = @finds_bin.call(config.dir)
       at_exit do
+        if config.transactional_server
+          @manages_transactions.rollback_transaction
+        end
         @initializer_hooks.run(:before_server_stop)
       end
 
