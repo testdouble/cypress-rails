@@ -4,7 +4,6 @@ Rails.application.load_tasks unless defined?(Rake::Task)
 
 CypressRails.hooks.before_server_start do
   # Add our fixtures before the resettable transaction is started
-  Rake::Task["db:test:prepare"].invoke
   Rake::Task["db:fixtures:load"].invoke
 end
 
