@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.1.1
+
+* Fix the `before_server_stop` hook by rolling back transactions first so that
+  it can clean out test data
+
 ## 0.1.0
 
 * **[Breaking]** Remove `CypressRails::TestCase`. Use `rake cypress:run` instead
