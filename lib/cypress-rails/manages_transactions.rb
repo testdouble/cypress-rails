@@ -1,3 +1,5 @@
+require_relative "initializer_hooks"
+
 module CypressRails
   class ManagesTransactions
     def self.instance
@@ -29,6 +31,8 @@ module CypressRails
           end
         end
       }
+
+      @initializer_hooks.run(:after_transaction_start)
     end
 
     def rollback_transaction
@@ -46,6 +50,10 @@ module CypressRails
     end
 
     private
+
+    def initialize
+      @initializer_hooks = InitializerHooks.instance
+    end
 
     def gather_connections
       setup_shared_connection_pool
