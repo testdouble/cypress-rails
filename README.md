@@ -7,70 +7,6 @@ This is a simple gem to make it easier to start writing browser tests with
 regardless of whether your app is server-side rendered HTML, completely
 client-side JavaScript, or something in-between.
 
-## Why do this?
-
-Rails ships with a perfectly competent browser-testing facility called [system
-tests](https://guides.rubyonrails.org/testing.html#system-testing) which depend
-on [capybara](https://github.com/teamcapybara/capybara) to drive your tests,
-most often with [Selenium](https://www.seleniumhq.org). All of these tools work,
-are used by lots of people, and are a perfectly reasonable choice when writing
-full-stack tests of your Rails application.
-
-So why would you go off the Rails to use Cypress and this gem, adding two
-additional layers to the Jenga tower of testing facilities that Rails ships
-with? Really, it comes down to the potential for an improved development
-experience. In particular:
-
-* Cypress's [IDE-like `open`
-  command](https://docs.cypress.io/guides/getting-started/writing-your-first-test.html#Add-a-test-file)
-  provides a highly visual, interactive, inspectable test runner. Not only can
-  you watch each test run and read the commands as they're executed, Cypress
-  takes a DOM snapshot before and after each command, which makes rewinding and
-  inspecting the state of the DOM trivially easy, something that I regularly
-  find myself losing 20 minutes attempting to do with Capybara
-* `cypress open` enables an almost REPL-like feedback loop that is much faster
-  and more information dense than using Capybara and Selenium. Rather than
-  running a test from the command line, seeing it fail, then adding a debug
-  breakpoint to a test to try to manipulate the browser or tweaking a call to a
-  Capybara API method, failures to be rather obvious when using Cypress and
-  fixing it is usually as easy as tweaking a command, hitting save, and watching
-  it re-run
-* With very few exceptions, a Cypress test that works in a browser window will
-  also pass when run headlessly in CI
-* Cypress selectors are [just jQuery
-  selectors](https://api.jquery.com/category/selectors/), which makes them both
-  more familiar and more powerful than the CSS and XPath selectors offered by
-  Capybara. Additionally, Cypress makes it very easy to drop into a plain
-  synchronous JavaScript function for [making more complex
-  assertions](https://docs.cypress.io/guides/references/assertions.html#Should-callback)
-  or composing repetitive tasks into [custom
-  commands](https://docs.cypress.io/api/cypress-api/custom-commands.html#Syntax#article)
-* Cypress commands are, generally, much faster than analogous tasks in Selenium.
-  Where certain clicks and form inputs will hang for 300-500ms for seemingly no
-  reason when running against Selenium WebDriver, Cypress commands tend to run
-  as fast as jQuery can select and fill an element (which is, of course, pretty
-  fast)
-* By default, Cypress [takes a
-  video](https://docs.cypress.io/guides/guides/screenshots-and-videos.html#Screenshots#article)
-  of every headless test run, taking a lot of the mystery (and subsequent
-  analysis & debugging) out of test failures in CI
-
-Nevertheless, there are trade-offs to attempting this (most notably around
-Cypress's [limited browser
-support](https://docs.cypress.io/guides/guides/launching-browsers.html#Browsers)
-and the complications to test data management), and I wouldn't recommend
-adopting Cypress and writing a bunch of browser tests for every application.
-But, if the above points sound like solutions to problems you experience, you
-might consider trying it out.
-
-## Installation
-
-**tl;dr**:
-
-1. Install the npm package `cypress`
-2. Install this gem `cypress-rails`
-3. Run `rake cypress:init`
-
 ### Installing Cypress itself
 
 The first step is making sure Cypress is installed (that's up to you, this
@@ -123,13 +59,7 @@ When using Rails, however, you'll also want your Rails test server to be running
 so that there's something for Cypress to interact with. `cypress-rails` provides
 a wrapper for running `cypress open` with a dedicated Rails test server.
 
-So, by running either:
-
-```
-$ cypress-rails open
-```
-
-Or:
+So, by running:
 
 ```
 $ rake cypress:open
@@ -143,13 +73,7 @@ itself.
 ### Run tests headlessly with `cypress run`
 
 To run your tests headlessly (e.g. when you're in CI), you'll want the `run`
-command
-
-```
-$ cypress-rails run
-```
-
-Or, with rake:
+command:
 
 ```
 $ rake cypress:run
@@ -266,7 +190,7 @@ pollute other test suites or scripts, you can use the `before_server_stop` to
 of your test database. To set up the hook, pass a block to
 `CypressRails.hooks.before_server_stop`.
 
-### Setting up continuous integration
+## Setting up continuous integration
 
 #### Circle CI
 
@@ -316,4 +240,69 @@ jobs:
       # Run your cypress tests
       - run: bin/rake cypress:run
 ```
+
+## Why use this?
+
+Rails ships with a perfectly competent browser-testing facility called [system
+tests](https://guides.rubyonrails.org/testing.html#system-testing) which depend
+on [capybara](https://github.com/teamcapybara/capybara) to drive your tests,
+most often with [Selenium](https://www.seleniumhq.org). All of these tools work,
+are used by lots of people, and are a perfectly reasonable choice when writing
+full-stack tests of your Rails application.
+
+So why would you go off the Rails to use Cypress and this gem, adding two
+additional layers to the Jenga tower of testing facilities that Rails ships
+with? Really, it comes down to the potential for an improved development
+experience. In particular:
+
+* Cypress's [IDE-like `open`
+  command](https://docs.cypress.io/guides/getting-started/writing-your-first-test.html#Add-a-test-file)
+  provides a highly visual, interactive, inspectable test runner. Not only can
+  you watch each test run and read the commands as they're executed, Cypress
+  takes a DOM snapshot before and after each command, which makes rewinding and
+  inspecting the state of the DOM trivially easy, something that I regularly
+  find myself losing 20 minutes attempting to do with Capybara
+* `cypress open` enables an almost REPL-like feedback loop that is much faster
+  and more information dense than using Capybara and Selenium. Rather than
+  running a test from the command line, seeing it fail, then adding a debug
+  breakpoint to a test to try to manipulate the browser or tweaking a call to a
+  Capybara API method, failures to be rather obvious when using Cypress and
+  fixing it is usually as easy as tweaking a command, hitting save, and watching
+  it re-run
+* With very few exceptions, a Cypress test that works in a browser window will
+  also pass when run headlessly in CI
+* Cypress selectors are [just jQuery
+  selectors](https://api.jquery.com/category/selectors/), which makes them both
+  more familiar and more powerful than the CSS and XPath selectors offered by
+  Capybara. Additionally, Cypress makes it very easy to drop into a plain
+  synchronous JavaScript function for [making more complex
+  assertions](https://docs.cypress.io/guides/references/assertions.html#Should-callback)
+  or composing repetitive tasks into [custom
+  commands](https://docs.cypress.io/api/cypress-api/custom-commands.html#Syntax#article)
+* Cypress commands are, generally, much faster than analogous tasks in Selenium.
+  Where certain clicks and form inputs will hang for 300-500ms for seemingly no
+  reason when running against Selenium WebDriver, Cypress commands tend to run
+  as fast as jQuery can select and fill an element (which is, of course, pretty
+  fast)
+* By default, Cypress [takes a
+  video](https://docs.cypress.io/guides/guides/screenshots-and-videos.html#Screenshots#article)
+  of every headless test run, taking a lot of the mystery (and subsequent
+  analysis & debugging) out of test failures in CI
+
+Nevertheless, there are trade-offs to attempting this (most notably around
+Cypress's [limited browser
+support](https://docs.cypress.io/guides/guides/launching-browsers.html#Browsers)
+and the complications to test data management), and I wouldn't recommend
+adopting Cypress and writing a bunch of browser tests for every application.
+But, if the above points sound like solutions to problems you experience, you
+might consider trying it out.
+
+## Installation
+
+**tl;dr**:
+
+1. Install the npm package `cypress`
+2. Install this gem `cypress-rails`
+3. Run `rake cypress:init`
+
 

@@ -1,10 +1,9 @@
 return unless Rails.env.test?
 
-require "cypress-rails"
+Rails.application.load_tasks unless defined?(Rake::Task)
 
 CypressRails.hooks.before_server_start do
   # Add our fixtures before the resettable transaction is started
-  Rails.application.load_tasks
   Rake::Task["db:test:prepare"].invoke
   Rake::Task["db:fixtures:load"].invoke
 end
@@ -22,6 +21,5 @@ end
 
 CypressRails.hooks.before_server_stop do
   # Purge and reload the test database so we don't leave our fixtures in there
-  Rails.application.load_tasks
   Rake::Task["db:test:prepare"].invoke
 end
