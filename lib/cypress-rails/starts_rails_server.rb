@@ -20,13 +20,18 @@ module CypressRails
 
     def configure_driver!
       # this is only necessary b/c we're piggybacking on the capybara server
-      require "action_dispatch/system_testing/driver"
-      require "action_dispatch/system_testing/browser"
-      ActionDispatch::SystemTesting::Driver.new(:selenium, {
-        using: :headless_chrome,
-        screen_size: [1400, 1400],
-        options: {}
-      }).use
+      Selenium::WebDriver::Chrome::Service.driver_path.try(:call)
+
+      Capybara.register_driver :selenium do |app|
+        options = Selenium::WebDriver::Chrome::Options.new
+        options.args << "--headless"
+        options.args << "--disable-gpu" if Gem.win_platform?
+
+        Capybara::Selenium::Driver.new(app, browser: :chrome, options: options).tap do |driver|
+          driver.browser.manage.window.size = Selenium::WebDriver::Dimension.new(1400, 1400)
+        end
+      end
+      Capybara.current_driver = :selenium
     end
 
     def configure_rails_to_run_our_state_reset_on_every_request!(transactional_server)
@@ -50,8 +55,8 @@ module CypressRails
     end
 
     def start_system_testing_server!
-      require "action_dispatch/system_testing/server"
-      ActionDispatch::SystemTesting::Server.new.run
+      Capybara.server = :puma, {Silent: false} if Capybara.server == Capybara.servers[:default]
+      Capybara.always_include_port = true
     end
   end
 end
