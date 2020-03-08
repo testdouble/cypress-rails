@@ -3,12 +3,12 @@
 require "uri"
 require "net/http"
 require "rack"
-require "capybara/server/middleware"
-require "capybara/server/animation_disabler"
-require "capybara/server/checker"
+require_relative "server/middleware"
+require_relative "server/checker"
+require_relative "server/timer"
+require_relative "server/puma"
 
 module CypressRails
-  # @api private
   class Server
     class << self
       def ports
@@ -19,21 +19,17 @@ module CypressRails
     attr_reader :app, :port, :host
 
     def initialize(app,
-      *deprecated_options,
-      port: Capybara.server_port,
-      host: Capybara.server_host,
-      reportable_errors: Capybara.server_errors,
+      port:,
+      host: "127.0.0.1",
+      reportable_errors: [Exception],
       extra_middleware: [])
-      unless deprecated_options.empty?
-        warn "Positional arguments, other than the application, to Server#new are deprecated, please use keyword arguments"
-      end
       @app = app
       @extra_middleware = extra_middleware
       @server_thread = nil # suppress warnings
-      @host = deprecated_options[1] || host
-      @reportable_errors = deprecated_options[2] || reportable_errors
-      @port = deprecated_options[0] || port
-      @port ||= Capybara::Server.ports[port_key]
+      @host = host
+      @reportable_errors = reportable_errors
+      @port = port
+      @port ||= Server.ports[port_key]
       @port ||= find_available_port(host)
       @checker = Checker.new(@host, @port)
     end
@@ -61,7 +57,7 @@ module CypressRails
     end
 
     def wait_for_pending_requests
-      timer = Capybara::Helpers.timer(expire_in: 60)
+      timer = Timer.new(60)
       while pending_requests?
         raise "Requests did not finish in 60 seconds: #{middleware.pending_requests}" if timer.expired?
 
@@ -71,13 +67,13 @@ module CypressRails
 
     def boot
       unless responsive?
-        Capybara::Server.ports[port_key] = port
+        Server.ports[port_key] = port
 
         @server_thread = Thread.new {
-          Capybara.server.call(middleware, port, host)
+          Puma.create(middleware, port, host)
         }
 
-        timer = Capybara::Helpers.timer(expire_in: 60)
+        timer = Timer.new(60)
         until responsive?
           raise "Rack application timed out during boot" if timer.expired?
 
@@ -99,7 +95,7 @@ module CypressRails
     end
 
     def port_key
-      Capybara.reuse_server ? app.object_id : middleware.object_id
+      app.object_id # as opposed to middleware.object_id if multiple instances
     end
 
     def pending_requests?
