@@ -19,7 +19,7 @@ module CypressRails
       if config.transactional_server
         @manages_transactions.begin_transaction
       end
-      @starts_rails_server.call(
+      server = @starts_rails_server.call(
         port: config.port,
         transactional_server: config.transactional_server
       )
@@ -32,7 +32,7 @@ module CypressRails
       end
 
       system <<~EXEC
-        CYPRESS_BASE_URL=http://#{Capybara.server_host}:#{Capybara.server_port} #{bin} #{command} --project "#{config.dir}" #{config.cypress_cli_opts}
+        CYPRESS_BASE_URL=http://#{server.host}:#{server.port} #{bin} #{command} --project "#{config.dir}" #{config.cypress_cli_opts}
       EXEC
     end
   end

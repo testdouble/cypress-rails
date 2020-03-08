@@ -1,6 +1,4 @@
-# frozen_string_literal: true
-
-module Capybara
+module CypressRails
   class Server
     class Checker
       TRY_HTTPS_ERRORS = [EOFError, Net::ReadTimeout, Errno::ECONNRESET].freeze
@@ -22,7 +20,7 @@ module Capybara
         @ssl
       end
 
-    private
+      private
 
       def http_request(&block)
         make_request(read_timeout: 2, &block)
@@ -37,7 +35,7 @@ module Capybara
       end
 
       def ssl_options
-        { use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE }
+        {use_ssl: true, verify_mode: OpenSSL::SSL::VERIFY_NONE}
       end
     end
   end

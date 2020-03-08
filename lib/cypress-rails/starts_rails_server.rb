@@ -4,8 +4,13 @@ require_relative "server"
 module CypressRails
   class StartsRailsServer
     def call(port:, transactional_server:)
+      configure_rails_to_run_our_state_reset_on_every_request!(transactional_server)
+      app = create_capybara_rack_app
+      Server.new(app, port: port).tap do |server|
+        server.boot
+      end
 
-## -- old>
+      ## -- old>
       # require "capybara"
       # require "selenium-webdriver"
       # Capybara.server_port = port || find_available_port
@@ -18,7 +23,7 @@ module CypressRails
       # Capybara.app = create_capybara_rack_app
       # start_system_testing_server!
       # Capybara.current_session
-    # end
+    end
 
     private
 
