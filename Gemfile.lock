@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     cypress-rails (0.1.1)
+      puma (>= 3.8.0)
       railties (>= 5.2.0)
 
 GEM
@@ -40,11 +41,14 @@ GEM
     method_source (0.9.2)
     mini_portile2 (2.4.0)
     minitest (5.14.0)
+    nio4r (2.5.2)
     nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
     parallel (1.19.1)
     parser (2.7.0.4)
       ast (~> 2.4.0)
+    puma (4.3.3)
+      nio4r (~> 2.0)
     rack (2.2.2)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)

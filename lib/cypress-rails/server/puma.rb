@@ -2,15 +2,7 @@ module CypressRails
   class Server
     module Puma
       def self.create(app, port, host)
-        begin
-          require "rack/handler/puma"
-        rescue LoadError
-          raise LoadError, "Unable to load `puma` for its server, please add `puma` to your project."
-        else
-          unless Rack::Handler::Puma.respond_to?(:config)
-            raise LoadError, "Requires `puma` version 3.8.0 or higher, please upgrade `puma` or register and specify your own server block"
-          end
-        end
+        require "rack/handler/puma"
 
         # If we just run the Puma Rack handler it installs signal handlers which prevent us from being able to interrupt tests.
         # Therefore construct and run the Server instance ourselves.
@@ -21,8 +13,8 @@ module CypressRails
         conf = Rack::Handler::Puma.config(app, options)
         events = ::Puma::Events.stdio
 
-        # puma_ver = Gem::Version.new(::Puma::Const::PUMA_VERSION)
-        # require_relative "patches/puma_ssl" if (Gem::Version.new("4.0.0")...Gem::Version.new("4.1.0")).cover? puma_ver
+        puma_ver = Gem::Version.new(::Puma::Const::PUMA_VERSION)
+        require_relative "patches/puma_ssl" if (Gem::Version.new("4.0.0")...Gem::Version.new("4.1.0")).cover? puma_ver
 
         events.log "Starting Puma..."
         events.log "* Version #{::Puma::Const::PUMA_VERSION} , codename: #{::Puma::Const::CODE_NAME}"
