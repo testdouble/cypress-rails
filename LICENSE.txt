@@ -1,6 +1,10 @@
 The MIT License (MIT)
 
-Copyright (c) 2019 Test Double, LLC
+Copyright (c) 2019-2020 Test Double, LLC
+
+Portions of the CypressRails::Server component:
+Copyright (c) 2009-2018 Thomas Walpole, Jonas Nicklas
+
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
