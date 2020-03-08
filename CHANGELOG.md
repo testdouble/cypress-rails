@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.1.2
+
+* Drop the hard deps on capybara and selenium-webdrivers (instead inlining
+  portions of the Capybara server logic). Additionally, add a hard dep on puma
+  since this gem is useless without it
+
 ## 0.1.1
 
 * Fix the `before_server_stop` hook by rolling back transactions first so that
