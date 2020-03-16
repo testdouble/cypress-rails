@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.1.3
+
+* Improve behavior of SIGINT (Ctrl-C) so a traceback isn't printed and stdout
+  isn't flushed after the program exits
+
 ## 0.1.2
 
 * Drop the hard deps on capybara and selenium-webdrivers (instead inlining
