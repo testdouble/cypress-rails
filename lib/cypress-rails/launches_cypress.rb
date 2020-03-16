@@ -39,7 +39,7 @@ module CypressRails
         run_exit_hooks_if_necessary!(config)
       end
       Signal.trap("INT") do
-        puts "Exiting cypress:open"
+        puts "Exiting cypress-rails…"
         exit
       end
     end
