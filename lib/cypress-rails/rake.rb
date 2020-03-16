@@ -8,10 +8,7 @@ end
 
 desc "Open interactive Cypress app for developing tests"
 task :"cypress:open" do
-  trap("SIGINT") do
-    puts "Exiting cypress:open"
-    exit
-  end
+  trap("SIGINT") {} # avoid traceback
   system "#{CLI} open"
 end
 

@@ -24,16 +24,36 @@ module CypressRails
         transactional_server: config.transactional_server
       )
       bin = @finds_bin.call(config.dir)
-      at_exit do
-        if config.transactional_server
-          @manages_transactions.rollback_transaction
-        end
-        @initializer_hooks.run(:before_server_stop)
-      end
+
+      set_exit_hooks!(config)
 
       system <<~EXEC
         CYPRESS_BASE_URL=http://#{server.host}:#{server.port} #{bin} #{command} --project "#{config.dir}" #{config.cypress_cli_opts}
       EXEC
+    end
+
+    private
+
+    def set_exit_hooks!(config)
+      at_exit do
+        run_exit_hooks_if_necessary!(config)
+      end
+      Signal.trap("INT") do
+        puts "Exiting cypress:open"
+        exit
+      end
+    end
+
+    def run_exit_hooks_if_necessary!(config)
+      @at_exit_hooks_have_fired ||= false # avoid warning
+      return if @at_exit_hooks_have_fired
+
+      if config.transactional_server
+        @manages_transactions.rollback_transaction
+      end
+      @initializer_hooks.run(:before_server_stop)
+
+      @at_exit_hooks_have_fired = true
     end
   end
 end
