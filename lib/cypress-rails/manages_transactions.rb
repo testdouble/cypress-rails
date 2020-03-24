@@ -68,8 +68,9 @@ module CypressRails
     # need to share a connection pool so that the reading connection
     # can see data in the open transaction on the writing connection.
     def setup_shared_connection_pool
-      writing_handler = ActiveRecord::Base.connection_handler
+      return unless ActiveRecord::Base.respond_to?(:connection_handlers)
 
+      writing_handler = ActiveRecord::Base.connection_handler
       ActiveRecord::Base.connection_handlers.values.each do |handler|
         if handler != writing_handler
           handler.connection_pool_list.each do |pool|
