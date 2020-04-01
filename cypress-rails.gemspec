@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "railties", ">= 5.2.0"
   spec.add_dependency "puma", ">= 3.8.0"
 
-  spec.add_development_dependency "bundler", "~> 1.17"
+  spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "standard", ">= 0.2.0"
