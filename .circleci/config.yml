@@ -10,6 +10,7 @@ jobs:
       - type: cache-restore
         key: v1-main-{{ checksum "Gemfile.lock" }}
 
+      - run: gem install bundler --version `tail -1 Gemfile.lock`
       - run: bundle install --path vendor/bundle
 
       - type: cache-save
