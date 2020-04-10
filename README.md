@@ -25,7 +25,7 @@ If you're on newer versions of Rails and using
 then you're likely already using yarn to manage your JavaScript dependencies. If
 that's the case, you can add Cypress with:
 
-```
+```sh
 $ yarn add --dev cypress
 ```
 
@@ -40,7 +40,7 @@ Now, to install the cypress-rails gem, you'll want to add it to your development
 & test gem groups of your Gemfile, so that you have easy access to its rake
 tasks:
 
-``` ruby
+```ruby
 group :development, :test do
   gem "cypress-rails"
 end
@@ -48,7 +48,7 @@ end
 
 Once installed, you'll want to run:
 
-```
+```sh
 $ rake cypress:init
 ```
 
@@ -69,7 +69,7 @@ a wrapper for running `cypress open` with a dedicated Rails test server.
 
 So, by running:
 
-```
+```sh
 $ rake cypress:open
 ```
 
@@ -83,7 +83,7 @@ itself.
 To run your tests headlessly (e.g. when you're in CI), you'll want the `run`
 command:
 
-```
+```sh
 $ rake cypress:run
 ```
 
@@ -233,7 +233,7 @@ jobs:
       # Yarn dependencies
       - restore_cache:
           keys:
-            - v1-yarn-{{ checksum "package.json" }}
+            - v1-yarn-{{ checksum "yarn.lock" }}
             # fallback to using the latest cache if no exact match is found
             - v1-yarn-
 
@@ -243,7 +243,7 @@ jobs:
           paths:
             - node_modules
             - ~/.cache
-          key: v1-yarn-{{ checksum "package.json" }}
+          key: v1-yarn-{{ checksum "yarn.lock" }}
 
       # Run your cypress tests
       - run: bin/rake cypress:run
