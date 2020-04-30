@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-ENV["RAILS_ENV"] = "test"
+ENV["RAILS_ENV"] ||= "test"
 require "pathname"
 require "cypress-rails"
 require Pathname.new(CypressRails::Config.new.dir).join("config/environment")
