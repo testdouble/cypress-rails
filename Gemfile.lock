@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cypress-rails (0.1.5)
+    cypress-rails (0.2.0)
       puma (>= 3.8.0)
       railties (>= 5.2.0)
 
@@ -35,7 +35,7 @@ GEM
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.4)
-    loofah (2.4.0)
+    loofah (2.5.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     method_source (1.0.0)
@@ -80,7 +80,7 @@ GEM
       rubocop-performance (~> 1.5.1)
     thor (1.0.1)
     thread_safe (0.3.6)
-    tzinfo (1.2.6)
+    tzinfo (1.2.7)
       thread_safe (~> 0.1)
     unicode-display_width (1.6.1)
     zeitwerk (2.3.0)
