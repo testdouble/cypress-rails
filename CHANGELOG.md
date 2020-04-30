@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.2.0
+
+* If `RAILS_ENV` has been explicitly set when the CLI or rake task is run,
+respect that set value instead of overriding it to "test"
+
 ## 0.1.3
 
 * Improve behavior of SIGINT (Ctrl-C) so a traceback isn't printed and stdout
