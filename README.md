@@ -160,6 +160,10 @@ preferred environment variables project-wide using a tool like
 * **CYPRESS_RAILS_DIR** (default: `Dir.pwd`) the directory of your project
 * **CYPRESS_RAILS_PORT** (default: _a random available port_) the port to run
   the Rails test server on
+* **CYPRESS_RAILS_BASE_PATH** (default: `"/"`) the base path for all Cypress's
+  requests to the app (e.g. via `cy.visit()`). If you've customized your
+  `baseUrl` setting (e.g. in `cypress.json`), you'll need to duplicate it with
+  this environment variable
 * **CYPRESS_RAILS_TRANSACTIONAL_SERVER** (default: `true`) when true, will start
   a transaction on all database connections before launching the server. In
   general this means anything done during `cypress open` or `cypress run` will

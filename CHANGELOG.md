@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.3.0
+
+* Add a `CYPRESS_RAILS_BASE_PATH` option which will be appended to the
+  `CYPRESS_BASE_URL` option that cypress-rails sets when launching cypress
+  commands. Apps that set `baseUrl` to something other than "/" can set this env
+  var to match for consistent behavior (or else set it using Cypress.config in a
+  support file)
+
 ## 0.2.0
 
 * If `RAILS_ENV` has been explicitly set when the CLI or rake task is run,
