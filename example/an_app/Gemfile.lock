@@ -1,7 +1,8 @@
 PATH
   remote: ../..
   specs:
-    cypress-rails (0.1.1)
+    cypress-rails (0.2.0)
+      puma (>= 3.8.0)
       railties (>= 5.2.0)
 
 GEM
@@ -158,4 +159,4 @@ RUBY VERSION
    ruby 2.6.3p62
 
 BUNDLED WITH
-   1.17.3
+   2.1.4
