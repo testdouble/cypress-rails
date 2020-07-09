@@ -202,6 +202,15 @@ pollute other test suites or scripts, you can use the `before_server_stop` to
 of your test database. To set up the hook, pass a block to
 `CypressRails.hooks.before_server_stop`.
 
+## Configuring Rails
+
+Beyond the configuration options above, you'll probably also want to set
+`config.cache_classes = false` in your Rails app's
+[config/environments/test.rb](/example/an_app/config/environments/test.rb#L9)
+file, so that changes to your Ruby code are reflected in your tests while you
+work on them with `rake cypress:open`. (If you leave this option on its default
+`true`, any changes to your Ruby code will require a server restart.)
+
 ## Setting up continuous integration
 
 #### Circle CI
