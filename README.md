@@ -204,12 +204,19 @@ of your test database. To set up the hook, pass a block to
 
 ## Configuring Rails
 
-Beyond the configuration options above, you'll probably also want to set
-`config.cache_classes = false` and `config.action_view.cache_template_loading = false`
+Beyond the configuration options above, you'll probably also want to disable caching
 in your Rails app's [config/environments/test.rb](/example/an_app/config/environments/test.rb#L9)
 file, so that changes to your Ruby code are reflected in your tests while you
-work on them with `rake cypress:open`. (If you leave this option on its default
-`true`, any changes to your Ruby code will require a server restart.)
+work on them with `rake cypress:open`. (If either option is set to 
+`true`, any changes to your Ruby code will require a server restart to be reflected as you work
+on your tests.)
+
+To illustrate, here's what that might look like in `config/environments/test.rb`:
+
+```ruby
+config.cache_classes = false
+config.action_view.cache_template_loading = false
+```
 
 ## Setting up continuous integration
 
