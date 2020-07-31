@@ -20,6 +20,7 @@ module CypressRails
         @manages_transactions.begin_transaction
       end
       server = @starts_rails_server.call(
+        host: config.host,
         port: config.port,
         transactional_server: config.transactional_server
       )
@@ -27,12 +28,16 @@ module CypressRails
 
       set_exit_hooks!(config)
 
-      command = <<~EXEC
-        CYPRESS_BASE_URL="http://#{server.host}:#{server.port}#{config.base_path}" "#{bin}" #{command} --project "#{config.dir}" #{config.cypress_cli_opts}
-      EXEC
+      if command.nil?
+        sleep
+      else
+        command = <<~EXEC
+          CYPRESS_BASE_URL="http://#{server.host}:#{server.port}#{config.base_path}" "#{bin}" #{command} --project "#{config.dir}" #{config.cypress_cli_opts}
+        EXEC
 
-      puts "\nLaunching Cypress…\n$ #{command}\n"
-      system command
+        puts "\nLaunching Cypress…\n$ #{command}\n"
+        system command
+      end
     end
 
     private
