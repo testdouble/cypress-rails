@@ -102,7 +102,7 @@ like:
 return unless Rails.env.test?
 
 CypressRails.hooks.before_server_start do
-  # Called once, before ether the transaction or the server is started
+  # Called once, before either the transaction or the server is started
 end
 
 CypressRails.hooks.after_transaction_start do
