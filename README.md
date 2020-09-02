@@ -158,6 +158,7 @@ preferred environment variables project-wide using a tool like
 
 
 * **CYPRESS_RAILS_DIR** (default: `Dir.pwd`) the directory of your project
+* **CYPRESS_RAILS_HOST** (default: `"127.0.0.1"`) the hostname to bind to
 * **CYPRESS_RAILS_PORT** (default: _a random available port_) the port to run
   the Rails test server on
 * **CYPRESS_RAILS_BASE_PATH** (default: `"/"`) the base path for all Cypress's
@@ -207,7 +208,7 @@ of your test database. To set up the hook, pass a block to
 Beyond the configuration options above, you'll probably also want to disable caching
 in your Rails app's [config/environments/test.rb](/example/an_app/config/environments/test.rb#L9)
 file, so that changes to your Ruby code are reflected in your tests while you
-work on them with `rake cypress:open`. (If either option is set to 
+work on them with `rake cypress:open`. (If either option is set to
 `true`, any changes to your Ruby code will require a server restart to be reflected as you work
 on your tests.)
 

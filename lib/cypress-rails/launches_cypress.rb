@@ -20,6 +20,7 @@ module CypressRails
         @manages_transactions.begin_transaction
       end
       server = @starts_rails_server.call(
+        host: config.host,
         port: config.port,
         transactional_server: config.transactional_server
       )

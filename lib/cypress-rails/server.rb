@@ -16,11 +16,11 @@ module CypressRails
       end
     end
 
-    attr_reader :app, :port, :host
+    attr_reader :app, :host, :port
 
     def initialize(app,
+      host:,
       port:,
-      host: "127.0.0.1",
       reportable_errors: [Exception],
       extra_middleware: [])
       @app = app
