@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.4.0
+
+* Add a `CYPRESS_RAILS_HOST` option that allows a hostname to be specified (as
+opposed to 127.0.0.1). Puma will still bind to 127.0.0.1, but Cypress will use
+the hostname in its `baseUrl`, which may be necessary for some folks' tests to
+work
+
 ## 0.3.0
 
 * Add a `CYPRESS_RAILS_BASE_PATH` option which will be appended to the
