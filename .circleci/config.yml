@@ -34,9 +34,9 @@ jobs:
       # Yarn dependencies
       - restore_cache:
           keys:
-            - v3-yarn-{{ checksum "example/an_app/package.json" }}
+            - v4-yarn-{{ checksum "example/an_app/yarn.lock" }}
             # fallback to using the latest cache if no exact match is found
-            - v3-yarn-
+            - v4-yarn-
 
       - run: |
           cd example/an_app
@@ -46,7 +46,7 @@ jobs:
           paths:
             - example/an_app/node_modules
             - ~/.cache
-          key: v3-yarn-{{ checksum "example/an_app/package.json" }}
+          key: v4-yarn-{{ checksum "example/an_app/yarn.lock" }}
 
       - run: bundle exec rake
       - run: ./script/test_example_app
