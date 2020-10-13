@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.4.1
+
+* Add backcompat for Ruby 2.4
+  ([#47](https://github.com/testdouble/cypress-rails/pull/47))
+
 ## 0.4.0
 
 * Add a `CYPRESS_RAILS_HOST` option that allows a hostname to be specified (as
