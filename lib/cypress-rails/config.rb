@@ -1,7 +1,9 @@
 require_relative "env"
 
 module CypressRails
-  class Config < Struct.new(:dir, :host, :port, :base_path, :transactional_server, :cypress_cli_opts, keyword_init: true)
+  class Config
+    attr_accessor :dir, :host, :port, :base_path, :transactional_server, :cypress_cli_opts
+
     def initialize(
       dir: Env.fetch("CYPRESS_RAILS_DIR", default: Dir.pwd),
       host: Env.fetch("CYPRESS_RAILS_HOST", default: "127.0.0.1"),
@@ -10,7 +12,12 @@ module CypressRails
       transactional_server: Env.fetch("CYPRESS_RAILS_TRANSACTIONAL_SERVER", type: :boolean, default: true),
       cypress_cli_opts: Env.fetch("CYPRESS_RAILS_CYPRESS_OPTS", default: "")
     )
-      super
+      @dir = dir
+      @host = host
+      @port = port
+      @base_path = base_path
+      @transactional_server = transactional_server
+      @cypress_cli_opts = cypress_cli_opts
     end
 
     def to_s
