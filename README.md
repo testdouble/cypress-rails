@@ -138,9 +138,9 @@ This way, you can easily instruct the server to reset its test state from your
 Cypress tests like so:
 
 ```js
-beforeEach(() =>
+beforeEach(() => {
   cy.request('/cypress_rails_reset_state')
-)
+})
 ```
 
 (Remember, in Cypress, `before` is a before-all hook and `beforeEach` is run
