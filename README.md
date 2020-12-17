@@ -172,6 +172,15 @@ preferred environment variables project-wide using a tool like
 * **CYPRESS_RAILS_CYPRESS_OPTS** (default: _none_) any options you want to
   forward to the Cypress CLI when running its `open` or `run` commands
 
+#### Example: Running a single spec from the command line
+
+It's a little verbose, but an example of using the above options to run a single
+Cypress test would look like this:
+
+```
+$ CYPRESS_RAILS_CYPRESS_OPTS="--spec cypress/integration/a_test.js" bin/rake cypress:run
+```
+
 ### Initializer hooks
 
 ### before_server_start
