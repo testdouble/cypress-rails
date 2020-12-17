@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.2
+
+* Add support to Rails 6.1 ([#52](https://github.com/testdouble/cypress-rails/issue/52))
+
 ## 0.4.1
 
 * Add backcompat for Ruby 2.4
