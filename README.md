@@ -304,7 +304,7 @@ experience. In particular:
   and more information dense than using Capybara and Selenium. Rather than
   running a test from the command line, seeing it fail, then adding a debug
   breakpoint to a test to try to manipulate the browser or tweaking a call to a
-  Capybara API method, failures to be rather obvious when using Cypress and
+  Capybara API method, failures tend to be rather obvious when using Cypress and
   fixing it is usually as easy as tweaking a command, hitting save, and watching
   it re-run
 * With very few exceptions, a Cypress test that works in a browser window will
