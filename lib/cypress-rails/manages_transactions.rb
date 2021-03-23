@@ -16,6 +16,8 @@ module CypressRails
       # When connections are established in the future, begin a transaction too
       @connection_subscriber = ActiveSupport::Notifications.subscribe("!connection.active_record") { |_, _, _, _, payload|
         if payload.key?(:spec_name) && (spec_name = payload[:spec_name])
+          setup_shared_connection_pool
+
           begin
             connection = ActiveRecord::Base.connection_handler.retrieve_connection(spec_name)
           rescue ActiveRecord::ConnectionNotEstablished
