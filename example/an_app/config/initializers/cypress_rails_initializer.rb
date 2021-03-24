@@ -7,6 +7,11 @@ CypressRails.hooks.before_server_start do
   Rake::Task["db:fixtures:load"].invoke
 end
 
+CypressRails.hooks.after_server_start do
+  # After the server has  booted we add the compliment!
+  puts "Congrats the server has started!"
+end
+
 CypressRails.hooks.after_transaction_start do
   # After each transaction, add this compliment (will be rolled back on reset)
   Compliment.create(text: "You are courageous")
