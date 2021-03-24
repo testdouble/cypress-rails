@@ -1,7 +1,7 @@
 PATH
   remote: ../..
   specs:
-    cypress-rails (0.4.1)
+    cypress-rails (0.4.2)
       puma (>= 3.8.0)
       railties (>= 5.2.0)
 
@@ -85,7 +85,7 @@ GEM
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (1.0.0)
-    mimemagic (0.3.5)
+    mimemagic (0.3.6)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.14.2)
@@ -164,4 +164,4 @@ RUBY VERSION
    ruby 2.6.3p62
 
 BUNDLED WITH
-   2.1.4
+   2.2.15
