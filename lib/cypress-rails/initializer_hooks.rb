@@ -13,7 +13,7 @@ module CypressRails
     end
 
     def after_server_start(&blk)
-      register(:before_server_start, blk)
+      register(:after_server_start, blk)
     end
 
     def after_transaction_start(&blk)
