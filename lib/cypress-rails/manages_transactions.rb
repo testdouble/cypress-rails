@@ -20,7 +20,7 @@ module CypressRails
 
           begin
             connection = ActiveRecord::Base.connection_handler.retrieve_connection(spec_name)
-          rescue ConnectionNotEstablished
+          rescue ActiveRecord::ConnectionNotEstablished
             connection = nil
           end
 
