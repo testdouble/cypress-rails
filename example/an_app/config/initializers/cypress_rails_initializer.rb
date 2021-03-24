@@ -8,8 +8,11 @@ CypressRails.hooks.before_server_start do
 end
 
 CypressRails.hooks.after_server_start do
-  # After the server has  booted we add the compliment!
-  puts "Congrats the server has started!"
+  # After the server has  booted we add the compliment to the existing fixture list!
+  Compliment.create(text: "This shall be the first.")
+  if Compliment.count == 4
+    raise "I cannot run tests without compliments!"
+  end
 end
 
 CypressRails.hooks.after_transaction_start do
