@@ -170,7 +170,7 @@ preferred environment variables project-wide using a tool like
   general this means anything done during `cypress open` or `cypress run` will
   be rolled back on exit (similar to running a Rails System test)
 * **CYPRESS_RAILS_CYPRESS_OPTS** (default: _none_) any options you want to
-  forward to the Cypress CLI when running its `open` or `run` commands
+  forward to the Cypress CLI when running its `open` or `run` commands. 
 
 #### Example: Running a single spec from the command line
 
@@ -179,6 +179,14 @@ Cypress test would look like this:
 
 ```
 $ CYPRESS_RAILS_CYPRESS_OPTS="--spec cypress/integration/a_test.js" bin/rake cypress:run
+```
+
+#### Example: Running your tests in Chromium
+
+By default, Cypress will run its tests in its packaged Electron app, unless you've configured it globally. To choose which browser it will run from the command line, try this:
+
+```
+$ CYPRESS_RAILS_CYPRESS_OPTS="--browser chromium" bin/rake cypress:run
 ```
 
 ### Initializer hooks
