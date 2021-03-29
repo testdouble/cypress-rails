@@ -1,4 +1,5 @@
 return unless Rails.env.test?
+require './lib/external_service'
 
 Rails.application.load_tasks unless defined?(Rake::Task)
 
@@ -13,6 +14,9 @@ CypressRails.hooks.after_server_start do
   if Compliment.count == 4
     raise "I cannot run tests without compliments!"
   end
+
+  # Start up external service
+  ExternalService.start_service
 end
 
 CypressRails.hooks.after_transaction_start do
@@ -29,4 +33,7 @@ end
 CypressRails.hooks.before_server_stop do
   # Purge and reload the test database so we don't leave our fixtures in there
   Rake::Task["db:test:prepare"].invoke
+
+  # Stops the external service
+  ExternalService.stop_service
 end
