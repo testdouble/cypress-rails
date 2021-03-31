@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.5.0
+
+* Add hook `before_server_start`
+  [#63](https://github.com/testdouble/cypress-rails/pull/63)
+* Fix namespace bug
+  [#64](https://github.com/testdouble/cypress-rails/pull/64)
+
 ## 0.4.2
 
 * Add support to Rails 6.1 ([#52](https://github.com/testdouble/cypress-rails/issue/52))
