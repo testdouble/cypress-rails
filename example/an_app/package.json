@@ -1,9 +1,13 @@
 {
   "name": "an_app",
   "private": true,
+  "scripts": {
+    "start": "http-server external_service --cors"
+  },
   "dependencies": {
     "@rails/ujs": "^6.0.0-alpha",
-    "@rails/webpacker": "5.2.1"
+    "@rails/webpacker": "5.2.1",
+    "http-server": "^0.12.3"
   },
   "version": "0.1.0",
   "devDependencies": {

@@ -198,6 +198,11 @@ will execute before the server or any transaction has been started. If you use
 Rails fixtures, it may make sense to load them here, so they don't need to be
 re-inserted for each request
 
+### after_server_start
+
+Pass a block to `CypressRails.hooks.after_server_start` to register a hook that
+will execute after the server has booted.
+
 ### after_transaction_start
 
 If there's any custom behavior or state management you want to do inside the

@@ -3,6 +3,7 @@
 require "uri"
 require "net/http"
 require "rack"
+require_relative "initializer_hooks"
 require_relative "server/middleware"
 require_relative "server/checker"
 require_relative "server/timer"
@@ -32,6 +33,7 @@ module CypressRails
       @port ||= Server.ports[port_key]
       @port ||= find_available_port(host)
       @checker = Checker.new(@host, @port)
+      @initializer_hooks = InitializerHooks.instance
     end
 
     def reset_error!
@@ -78,6 +80,7 @@ module CypressRails
           raise "Rack application timed out during boot" if timer.expired?
 
           @server_thread.join(0.1)
+          @initializer_hooks.run(:after_server_start)
         end
       end
 
