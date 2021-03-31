@@ -1,5 +1,5 @@
 return unless Rails.env.test?
-require './lib/external_service'
+require "./lib/external_service"
 
 Rails.application.load_tasks unless defined?(Rake::Task)
 
