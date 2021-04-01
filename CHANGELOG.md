@@ -2,7 +2,7 @@
 
 ## 0.5.0
 
-* Add hook `before_server_start`
+* Add hook `after_server_start`
   [#63](https://github.com/testdouble/cypress-rails/pull/63)
 * Fix namespace bug
   [#64](https://github.com/testdouble/cypress-rails/pull/64)
