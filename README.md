@@ -1,6 +1,6 @@
 # cypress-rails
 
-[![CircleCI](https://circleci.com/gh/testdouble/cypress-rails/tree/master.svg?style=svg)](https://circleci.com/gh/testdouble/cypress-rails/tree/master)
+[![CircleCI](https://circleci.com/gh/testdouble/cypress-rails/tree/main.svg?style=svg)](https://circleci.com/gh/testdouble/cypress-rails/tree/main)
 
 This is a simple gem to make it easier to start writing browser tests with
 [Cypress](http://cypress.io) for your [Rails](https://rubyonrails.org) apps,
@@ -170,7 +170,7 @@ preferred environment variables project-wide using a tool like
   general this means anything done during `cypress open` or `cypress run` will
   be rolled back on exit (similar to running a Rails System test)
 * **CYPRESS_RAILS_CYPRESS_OPTS** (default: _none_) any options you want to
-  forward to the Cypress CLI when running its `open` or `run` commands. 
+  forward to the Cypress CLI when running its `open` or `run` commands.
 
 #### Example: Running a single spec from the command line
 
