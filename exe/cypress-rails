@@ -3,7 +3,7 @@
 ENV["RAILS_ENV"] ||= "test"
 require "pathname"
 require "cypress-rails"
-require Pathname.new(CypressRails::Config.new.dir).join("config/environment")
+require Pathname.new(CypressRails::Config.new.dir).join("config/environment").to_s
 
 command = ARGV[0]
 case command
