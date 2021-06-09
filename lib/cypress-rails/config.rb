@@ -2,7 +2,15 @@ require_relative "env"
 
 module CypressRails
   class Config
-    attr_accessor :dir, :host, :port, :base_path, :transactional_server, :cypress_cli_opts
+    attr_accessor :dir,
+                  :host,
+                  :port,
+                  :base_path,
+                  :transactional_server,
+                  :cypress_cli_opts,
+                  :cypress_path,
+                  :cypress_base_url,
+                  :cypress_dir
 
     def initialize(
       dir: Env.fetch("CYPRESS_RAILS_DIR", default: Dir.pwd),
@@ -10,7 +18,10 @@ module CypressRails
       port: Env.fetch("CYPRESS_RAILS_PORT"),
       base_path: Env.fetch("CYPRESS_RAILS_BASE_PATH", default: "/"),
       transactional_server: Env.fetch("CYPRESS_RAILS_TRANSACTIONAL_SERVER", type: :boolean, default: true),
-      cypress_cli_opts: Env.fetch("CYPRESS_RAILS_CYPRESS_OPTS", default: "")
+      cypress_cli_opts: Env.fetch("CYPRESS_RAILS_CYPRESS_OPTS", default: ""),
+      cypress_path: Env.fetch("CYPRESS_RAILS_CYPRESS_PATH", default: "node_modules/.bin/cypress"),
+      cypress_base_url: Env.fetch("CYPRESS_BASE_URL", default: nil),
+      cypress_dir: Env.fetch("CYPRESS_DIR", default: nil)
     )
       @dir = dir
       @host = host
@@ -18,6 +29,9 @@ module CypressRails
       @base_path = base_path
       @transactional_server = transactional_server
       @cypress_cli_opts = cypress_cli_opts
+      @cypress_path = cypress_path
+      @cypress_base_url = cypress_base_url
+      @cypress_dir = cypress_dir
     end
 
     def to_s
@@ -31,6 +45,9 @@ module CypressRails
          CYPRESS_RAILS_BASE_PATH...............#{base_path.inspect}
          CYPRESS_RAILS_TRANSACTIONAL_SERVER....#{transactional_server.inspect}
          CYPRESS_RAILS_CYPRESS_OPTS............#{cypress_cli_opts.inspect}
+         CYPRESS_RAILS_CYPRESS_PATH............#{cypress_path.inspect}
+         CYPRESS_BASE_URL......................#{cypress_base_url.inspect}
+         CYPRESS_DIR...........................#{cypress_dir.inspect}
 
       DESC
     end

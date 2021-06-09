@@ -1,12 +1,12 @@
 require "pathname"
+require_relative "config"
 
 module CypressRails
   class FindsBin
-    LOCAL_PATH = "node_modules/.bin/cypress"
-
-    def call(dir = Dir.pwd)
-      local_path = Pathname.new(dir).join(LOCAL_PATH)
+    def call(dir = Dir.pwd, config = Config.new)
+      local_path = config.cypress_path
       if File.exist?(local_path)
+        # local_path = Pathname.new(dir).join(LOCAL_PATH)
         local_path
       else
         "cypress"

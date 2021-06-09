@@ -171,6 +171,14 @@ preferred environment variables project-wide using a tool like
   be rolled back on exit (similar to running a Rails System test)
 * **CYPRESS_RAILS_CYPRESS_OPTS** (default: _none_) any options you want to
   forward to the Cypress CLI when running its `open` or `run` commands.
+* **CYPRESS_BASE_URL** (default: _none_) the url where to find your frontend application
+  if you run it seperately from your Rails application
+* **CYPRESS_DIR** (default: _none_) the path to your Cypress test files if you keep them 
+  outside of the Rails application
+* **CYPRESS_RAILS_CYPRESS_PATH** (default: `"node_modules/.bin/cypress"`) The path to your
+  Cypress executable. You need to modify this if you have Cypress installed in a different
+  directory than your Rails application
+
 
 #### Example: Running a single spec from the command line
 
