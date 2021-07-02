@@ -2,6 +2,8 @@ require_relative "initializer_hooks"
 
 module CypressRails
   class ManagesTransactions
+    attr_writer :config
+
     def self.instance
       @instance ||= new
     end
@@ -56,7 +58,7 @@ module CypressRails
     end
 
     def gather_connections
-      setup_shared_connection_pool
+      setup_shared_connection_pool if @config.shared_connection_pool
 
       ActiveRecord::Base.connection_handler.connection_pool_list.map(&:connection)
     end

@@ -15,6 +15,7 @@ module CypressRails
 
     def call(command, config)
       puts config.to_s
+      @manages_transactions.config = config
       @initializer_hooks.run(:before_server_start)
       if config.transactional_server
         @manages_transactions.begin_transaction
