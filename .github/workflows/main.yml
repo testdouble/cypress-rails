@@ -20,8 +20,6 @@ jobs:
         with:
           working-directory: "example"
           runTests: false
-          browser: chrome
-          headless: true
 
       - name: Run tests
         run: ./script/test
