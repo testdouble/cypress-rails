@@ -16,10 +16,6 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
-      - uses: cypress-io/github-action@v2
-        with:
-          working-directory: "example"
-          runTests: false
 
       - name: Run tests
         run: ./script/test
