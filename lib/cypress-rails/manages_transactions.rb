@@ -68,7 +68,7 @@ module CypressRails
     # need to share a connection pool so that the reading connection
     # can see data in the open transaction on the writing connection.
     def setup_shared_connection_pool
-      ActiveRecord::TestFixtures.instance_method(:setup_shared_connection_pool).bind(self).call
+      ActiveRecord::TestFixtures.instance_method(:setup_shared_connection_pool).bind_call(self)
     end
   end
 end

@@ -4,11 +4,8 @@ module CypressRails
       return default unless ENV.key?(name)
 
       if type == :boolean
-        if ["", "0", "n", "no", "false"].include?(ENV.fetch(name))
-          false
-        else
-          true
-        end
+        no_like_flag = ["", "0", "n", "no", "false"].include?(ENV.fetch(name))
+        !no_like_flag
       else
         ENV.fetch(name)
       end

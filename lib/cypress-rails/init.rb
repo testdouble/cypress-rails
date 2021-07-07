@@ -24,7 +24,7 @@ module CypressRails
     end
 
     def merge_existing_with_defaults(json_path)
-      Hash[JSON.parse(File.read(json_path)).merge(DEFAULT_CONFIG).sort]
+      JSON.parse(File.read(json_path)).merge(DEFAULT_CONFIG).sort.to_h
     end
   end
 end
