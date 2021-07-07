@@ -1,4 +1,4 @@
 ignore:
   - 'vendor/bundle/**/*'
-  - 'example/an_app/node_modules/**/*'
-  - 'example/an_app/vendor/bundle/**/*'
+  - 'example/node_modules/**/*'
+  - 'example/vendor/bundle/**/*'

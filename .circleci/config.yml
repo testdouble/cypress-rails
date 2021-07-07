@@ -20,33 +20,33 @@ jobs:
 
       # Bundle install dependencies for example app
       - type: cache-restore
-        key: v1-example-{{ checksum "example/an_app/Gemfile.lock" }}
+        key: v1-example-{{ checksum "example/Gemfile.lock" }}
 
       - run: |
-          cd example/an_app
+          cd example
           bundle install --path vendor/bundle
 
       - type: cache-save
-        key: v1-example-{{ checksum "example/an_app/Gemfile.lock" }}
+        key: v1-example-{{ checksum "example/Gemfile.lock" }}
         paths:
-          - example/an_app/vendor/bundle
+          - example/vendor/bundle
 
       # Yarn dependencies
       - restore_cache:
           keys:
-            - v4-yarn-{{ checksum "example/an_app/yarn.lock" }}
+            - v4-yarn-{{ checksum "example/yarn.lock" }}
             # fallback to using the latest cache if no exact match is found
             - v4-yarn-
 
       - run: |
-          cd example/an_app
+          cd example
           yarn install
 
       - save_cache:
           paths:
-            - example/an_app/node_modules
+            - example/node_modules
             - ~/.cache
-          key: v4-yarn-{{ checksum "example/an_app/yarn.lock" }}
+          key: v4-yarn-{{ checksum "example/yarn.lock" }}
 
       - run: bundle exec rake
       - run: ./script/test_example_app

@@ -4,7 +4,7 @@ set -e
 
 directory=$1
 
-cd example/an_app
+cd example
 bundle
 yarn install
 

@@ -120,7 +120,7 @@ end
 
 (You can find [an
 example
-initializer](/example/an_app/config/initializers/cypress_rails_initializer.rb)
+initializer](/example/config/initializers/cypress_rails_initializer.rb)
 in this repo.)
 
 The gem also provides a special route on the test server:
@@ -228,7 +228,7 @@ of your test database. To set up the hook, pass a block to
 ## Configuring Rails
 
 Beyond the configuration options above, you'll probably also want to disable caching
-in your Rails app's [config/environments/test.rb](/example/an_app/config/environments/test.rb#L9)
+in your Rails app's [config/environments/test.rb](/example/config/environments/test.rb#L9)
 file, so that changes to your Ruby code are reflected in your tests while you
 work on them with `rake cypress:open`. (If either option is set to
 `true`, any changes to your Ruby code will require a server restart to be reflected as you work

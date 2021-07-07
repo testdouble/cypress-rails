@@ -1,12 +1,11 @@
 source "https://rubygems.org"
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem "rails", "~> 6.0"
+gem "rails"
 gem "sqlite3"
 gem "puma"
 gem "webpacker"
 gem "bootsnap", require: false
 
 group :development, :test do
-  gem "cypress-rails", path: "../.."
+  gem "cypress-rails", path: ".."
 end
