@@ -92,6 +92,7 @@ GEM
     nokogiri (1.11.7)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
+    pg (1.2.3)
     puma (5.3.2)
       nio4r (~> 2.0)
     racc (1.5.2)
@@ -135,7 +136,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
     thor (1.1.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
@@ -155,9 +155,9 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   cypress-rails!
+  pg
   puma
   rails
-  sqlite3
   webpacker
 
 BUNDLED WITH
