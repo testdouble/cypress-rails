@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 0.5.1
+
+* Sprinkles two instance variables to the custom transaction manager that cribs
+  its implementation from ActiveRecord::TestFixtures (see f75f280)
+  [#88](https://github.com/testdouble/cypress-rails/issues/88)
+  [#89](https://github.com/testdouble/cypress-rails/pull/89)
+
 ## 0.5.0
 
 * Add hook `after_server_start`
