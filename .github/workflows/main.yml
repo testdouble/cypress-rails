@@ -2,22 +2,23 @@ name: CI
 
 on: [push, pull_request, workflow_dispatch]
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        ruby-version: ['2.7', '3.0']
 
     steps:
       - uses: actions/checkout@v2
       - uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7
+          ruby-version: ${{ matrix.ruby-version }}
           bundler-cache: true
       - uses: cypress-io/github-action@v2
         with:
           working-directory: "example"
-          # install-command: echo "skip cypress install"
-          # command: echo "skip cypress run"
           runTests: false
           browser: chrome
           headless: true
