@@ -11,6 +11,7 @@ module CypressRails
         options = default_options # .merge(options)
 
         conf = Rack::Handler::Puma.config(app, options)
+        conf.clamp
         events = ::Puma::Events.stdio
 
         puma_ver = Gem::Version.new(::Puma::Const::PUMA_VERSION)
