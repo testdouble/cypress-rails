@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.5.2
+
+* Fixes a puma deprecation warning
+  [#95](https://github.com/testdouble/cypress-rails/pull/95)
+
 ## 0.5.1
 
 * Sprinkles two instance variables to the custom transaction manager that cribs
