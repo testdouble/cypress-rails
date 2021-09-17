@@ -71,7 +71,7 @@ module CypressRails
       @legacy_saved_pool_configs ||= Hash.new { |hash, key| hash[key] = {} }
       @saved_pool_configs ||= Hash.new { |hash, key| hash[key] = {} }
 
-      ActiveRecord::TestFixtures.instance_method(:setup_shared_connection_pool).bind_call(self)
+      ActiveRecord::TestFixtures.instance_method(:setup_shared_connection_pool).bind(self).call
     end
   end
 end
