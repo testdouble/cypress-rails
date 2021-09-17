@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.5.3
+
+* Fix 2.5 & 2.6 compatibility
+  [#100](https://github.com/testdouble/cypress-rails/issues/100)
+
 ## 0.5.2
 
 * Fixes a puma deprecation warning
