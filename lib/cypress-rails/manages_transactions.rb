@@ -71,7 +71,9 @@ module CypressRails
       @legacy_saved_pool_configs ||= Hash.new { |hash, key| hash[key] = {} }
       @saved_pool_configs ||= Hash.new { |hash, key| hash[key] = {} }
 
-      ActiveRecord::TestFixtures.instance_method(:setup_shared_connection_pool).bind(self).call
+      # This only works with Rails 6.
+      # There is no `setup_shared_connection_pool` method in Rails 5 TextFixtures
+      # ActiveRecord::TestFixtures.instance_method(:setup_shared_connection_pool).bind(self).call
     end
   end
 end
