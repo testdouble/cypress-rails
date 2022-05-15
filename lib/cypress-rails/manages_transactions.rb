@@ -68,6 +68,7 @@ module CypressRails
     # need to share a connection pool so that the reading connection
     # can see data in the open transaction on the writing connection.
     def setup_shared_connection_pool
+      return unless ActiveRecord::TestFixtures.respond_to?(:setup_shared_connection_pool)
       @legacy_saved_pool_configs ||= Hash.new { |hash, key| hash[key] = {} }
       @saved_pool_configs ||= Hash.new { |hash, key| hash[key] = {} }
 
