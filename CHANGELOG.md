@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.5.4
+
+* Fix Rails 5 support
+  [#126](https://github.com/testdouble/cypress-rails/pull/126)
+
 ## 0.5.3
 
 * Fix 2.5 & 2.6 compatibility
