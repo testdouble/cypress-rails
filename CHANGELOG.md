@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.5.5
+
+* Add Puma 6 support
+  [#136](https://github.com/testdouble/cypress-rails/pull/136)
+
 ## 0.5.4
 
 * Fix Rails 5 support
