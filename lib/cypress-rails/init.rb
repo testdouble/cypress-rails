@@ -22,23 +22,12 @@ module CypressRails
 
     def call(dir = Dir.pwd)
       config_path = File.join(dir, "cypress.config.js")
-      config_content = determine_new_config(config_path)
-      File.write(config_path, config_content)
-      puts "Cypress config (re)initialized in #{config_path}"
-    end
-
-    private
-
-    def determine_new_config(config_path)
       if File.exist?(config_path)
-        merge_existing_with_defaults(config_path) 
-      else
-        DEFAULT_CONFIG
+        warn('Cypress config is already exist!')
+        return
       end
-    end
-
-    def merge_existing_with_defaults(config_path)
-      File.read(config_path)
+      File.write(config_path, DEFAULT_CONFIG)
+      puts "Cypress config initialized in #{config_path}"
     end
   end
 end
