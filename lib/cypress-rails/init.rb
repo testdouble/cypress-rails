@@ -1,6 +1,6 @@
 module CypressRails
   class Init
-    DEFAULT_CONFIG = <<~CYPRESS_CONFIG
+    DEFAULT_CONFIG = <<~JS
       const { defineConfig } = require('cypress')
 
       module.exports = defineConfig({
@@ -17,16 +17,16 @@ module CypressRails
         videosFolder: "tmp/cypress_videos",
         trashAssetsBeforeRuns: false
       })
-    CYPRESS_CONFIG
+    JS
 
     def call(dir = Dir.pwd)
       config_path = File.join(dir, "cypress.config.js")
-      if File.exist?(config_path)
-        warn('Cypress config is already exist!')
-        return
+      if !File.exist?(config_path)
+        File.write(config_path, DEFAULT_CONFIG)
+        puts "Cypress config initialized in `#{config_path}'"
+      else
+        warn "Cypress config already exists in `#{config_path}'. Skipping."
       end
-      File.write(config_path, DEFAULT_CONFIG)
-      puts "Cypress config initialized in #{config_path}"
     end
   end
 end
