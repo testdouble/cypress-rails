@@ -50,7 +50,7 @@ Once installed, you'll want to run:
 $ rake cypress:init
 ```
 
-This will override a few configurations in your `cypress.json` configuration
+This will override a few configurations in your `cypress.config.js` configuration
 file.
 
 ## Usage
@@ -161,7 +161,7 @@ preferred environment variables project-wide using a tool like
   the Rails test server on
 * **CYPRESS_RAILS_BASE_PATH** (default: `"/"`) the base path for all Cypress's
   requests to the app (e.g. via `cy.visit()`). If you've customized your
-  `baseUrl` setting (e.g. in `cypress.json`), you'll need to duplicate it with
+  `baseUrl` setting (e.g. in `cypress.config.js`), you'll need to duplicate it with
   this environment variable
 * **CYPRESS_RAILS_TRANSACTIONAL_SERVER** (default: `true`) when true, will start
   a transaction on all database connections before launching the server. In

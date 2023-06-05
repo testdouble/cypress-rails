@@ -10,6 +10,7 @@ yarn install
 
 # test a normal test run
 bundle exec rake db:test:prepare
+NODE_OPTIONS=--openssl-legacy-provider RAILS_ENV=test bundle exec rake assets:precompile
 bundle exec rake cypress:run
 
 # test that passing options works (by printing help)
