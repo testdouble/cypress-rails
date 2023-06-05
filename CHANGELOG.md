@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.6.0
+
+* Update initializer task to generate valid Cypress v10+ configurations
+  [#156](https://github.com/testdouble/cypress-rails/pull/156)
+
 ## 0.5.5
 
 * Add Puma 6 support
