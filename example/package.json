@@ -11,6 +11,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
+    "@replayio/cypress": "^1.0.2",
     "cypress": "^12.13.0",
     "webpack-dev-server": "^3.8.0"
   }
