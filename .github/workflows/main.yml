@@ -18,7 +18,7 @@ jobs:
           bundler-cache: true
 
       - name: Run tests
-        run: ./script/test
+        run: CYPRESS_RAILS_CYPRESS_OPTS="--browser replay-chromium" ./script/test
 
       # Always run this step so failed tests are uploaded
       - name: Upload replays
