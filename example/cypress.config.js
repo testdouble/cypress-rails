@@ -1,7 +1,7 @@
 const { defineConfig } = require('cypress')
 const replay = require('@replayio/cypress')
 
-module.exports = defineConfig{
+module.exports = defineConfig({
   // setupNodeEvents can be defined in either
   // the e2e or component configuration
   e2e: {
