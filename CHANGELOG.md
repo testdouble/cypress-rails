@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.6.1
+
+* Fix a deprecation warning in Rails
+  [#157](https://github.com/testdouble/cypress-rails/pull/157)
+
 ## 0.6.0
 
 * Update initializer task to generate valid Cypress v10+ configurations
