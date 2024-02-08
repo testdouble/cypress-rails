@@ -28,6 +28,7 @@ module CypressRails
         cypress-rails configuration:
         ============================
          CYPRESS_RAILS_DIR.....................#{dir.inspect}
+         CYPRESS_DIR...........................#{cy_dir.inspect}
          CYPRESS_RAILS_HOST....................#{host.inspect}
          CYPRESS_RAILS_PORT....................#{port.inspect}
          CYPRESS_RAILS_BASE_PATH...............#{base_path.inspect}

@@ -156,6 +156,7 @@ preferred environment variables project-wide using a tool like
 
 
 * **CYPRESS_RAILS_DIR** (default: `Dir.pwd`) the directory of your project
+* **CYPRESS_DIR** (default: `Dir.pwd`) the directory of your Cypress project
 * **CYPRESS_RAILS_HOST** (default: `"127.0.0.1"`) the hostname to bind to
 * **CYPRESS_RAILS_PORT** (default: _a random available port_) the port to run
   the Rails test server on
