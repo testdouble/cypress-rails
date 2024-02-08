@@ -19,8 +19,8 @@ module CypressRails
       })
     JS
 
-    def call(dir = Dir.pwd)
-      config_path = File.join(dir, "cypress.config.js")
+    def call(cypress_dir = Config.new.cypress_dir)
+      config_path = File.join(cypress_dir, "cypress.config.js")
       if !File.exist?(config_path)
         File.write(config_path, DEFAULT_CONFIG)
         puts "Cypress config initialized in `#{config_path}'"

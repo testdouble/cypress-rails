@@ -2,19 +2,19 @@ require_relative "env"
 
 module CypressRails
   class Config
-    attr_accessor :dir, :cy_dir, :host, :port, :base_path, :transactional_server, :cypress_cli_opts
+    attr_accessor :rails_dir, :cypress_dir, :host, :port, :base_path, :transactional_server, :cypress_cli_opts
 
     def initialize(
-      dir: Env.fetch("CYPRESS_RAILS_DIR", default: Dir.pwd),
-      cy_dir: Env.fetch("CYPRESS_DIR", default: Dir.pwd),
+      rails_dir: Env.fetch("CYPRESS_RAILS_DIR", default: Dir.pwd),
+      cypress_dir: Env.fetch("CYPRESS_DIR", default: Dir.pwd),
       host: Env.fetch("CYPRESS_RAILS_HOST", default: "127.0.0.1"),
       port: Env.fetch("CYPRESS_RAILS_PORT"),
       base_path: Env.fetch("CYPRESS_RAILS_BASE_PATH", default: "/"),
       transactional_server: Env.fetch("CYPRESS_RAILS_TRANSACTIONAL_SERVER", type: :boolean, default: true),
       cypress_cli_opts: Env.fetch("CYPRESS_RAILS_CYPRESS_OPTS", default: "")
     )
-      @dir = dir
-      @cy_dir = cy_dir
+      @rails_dir = rails_dir
+      @cypress_dir = cypress_dir
       @host = host
       @port = port
       @base_path = base_path
@@ -27,8 +27,8 @@ module CypressRails
 
         cypress-rails configuration:
         ============================
-         CYPRESS_RAILS_DIR.....................#{dir.inspect}
-         CYPRESS_DIR...........................#{cy_dir.inspect}
+         CYPRESS_RAILS_DIR.....................#{rails_dir.inspect}
+         CYPRESS_DIR...........................#{cypress_dir.inspect}
          CYPRESS_RAILS_HOST....................#{host.inspect}
          CYPRESS_RAILS_PORT....................#{port.inspect}
          CYPRESS_RAILS_BASE_PATH...............#{base_path.inspect}
