@@ -6,7 +6,7 @@ module CypressRails
 
     def initialize(
       rails_dir: Env.fetch("CYPRESS_RAILS_DIR", default: Dir.pwd),
-      cypress_dir: Env.fetch("CYPRESS_DIR", default: Dir.pwd),
+      cypress_dir: Env.fetch("CYPRESS_RAILS_CYPRESS_DIR", default: rails_dir),
       host: Env.fetch("CYPRESS_RAILS_HOST", default: "127.0.0.1"),
       port: Env.fetch("CYPRESS_RAILS_PORT"),
       base_path: Env.fetch("CYPRESS_RAILS_BASE_PATH", default: "/"),
@@ -28,7 +28,7 @@ module CypressRails
         cypress-rails configuration:
         ============================
          CYPRESS_RAILS_DIR.....................#{rails_dir.inspect}
-         CYPRESS_DIR...........................#{cypress_dir.inspect}
+         CYPRESS_RAILS_CYPRESS_DIR.............#{cypress_dir.inspect}
          CYPRESS_RAILS_HOST....................#{host.inspect}
          CYPRESS_RAILS_PORT....................#{port.inspect}
          CYPRESS_RAILS_BASE_PATH...............#{base_path.inspect}
