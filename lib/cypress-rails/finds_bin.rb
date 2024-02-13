@@ -4,8 +4,8 @@ module CypressRails
   class FindsBin
     LOCAL_PATH = "node_modules/.bin/cypress"
 
-    def call(dir = Dir.pwd)
-      local_path = Pathname.new(dir).join(LOCAL_PATH)
+    def call(cypress_dir = Dir.pwd)
+      local_path = Pathname.new(cypress_dir).join(LOCAL_PATH)
       if File.exist?(local_path)
         local_path
       else
