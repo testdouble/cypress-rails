@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.7.0
+git
+* Add a `CYPRESS_RAILS_CYPRESS_DIR` option for cases where
+the cypress tests live outside the CYPRESS_RAILS_DIR [#159](https://github.com/testdouble/cypress-rails/pull/159)
+
 ## 0.6.1
 
 * Fix a deprecation warning in Rails
