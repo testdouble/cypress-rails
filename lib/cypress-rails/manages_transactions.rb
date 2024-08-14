@@ -10,7 +10,12 @@ module CypressRails
       @connections = gather_connections
       @connections.each do |connection|
         connection.begin_transaction joinable: false, _lazy: false
-        connection.pool.lock_thread = true
+        if connection.pool.respond_to?(:pin_connection!)
+          # Rails 7.2+
+          connection.pool.pin_connection!(true)
+        else
+          connection.pool.lock_thread = true
+        end
       end
 
       # When connections are established in the future, begin a transaction too
@@ -26,7 +31,12 @@ module CypressRails
 
           if connection && !@connections.include?(connection)
             connection.begin_transaction joinable: false, _lazy: false
-            connection.pool.lock_thread = true
+            if connection.pool.respond_to?(:pin_connection!)
+              # Rails 7.2+
+              connection.pool.pin_connection!(true)
+            else
+              connection.pool.lock_thread = true
+            end
             @connections << connection
           end
         end
@@ -42,7 +52,12 @@ module CypressRails
 
       @connections.each do |connection|
         connection.rollback_transaction if connection.transaction_open?
-        connection.pool.lock_thread = false
+        if connection.pool.respond_to?(:unpin_connection!)
+          # Rails 7.2+
+          connection.pool.unpin_connection!
+        else
+          connection.pool.lock_thread = false
+        end
       end
       @connections.clear
 
@@ -58,7 +73,14 @@ module CypressRails
     def gather_connections
       setup_shared_connection_pool
 
-      ActiveRecord::Base.connection_handler.connection_pool_list.map(&:connection)
+      ActiveRecord::Base.connection_handler.connection_pool_list.map do |pool|
+        # Rails 7.2+
+        if pool.respond_to?(:lease_connection)
+          pool.lease_connection
+        else
+          pool.connection
+        end
+      end
     end
 
     # Shares the writing connection pool with connections on
