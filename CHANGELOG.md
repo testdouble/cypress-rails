@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.7.1
+* Add Rack 3.1 support [#163](https://github.com/testdouble/cypress-rails/pull/163)
+
 ## 0.7.0
 git
 * Add a `CYPRESS_RAILS_CYPRESS_DIR` option for cases where

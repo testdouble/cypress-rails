@@ -10,7 +10,8 @@ module CypressRails
         default_options = {Host: host, Port: port, Threads: "0:4", workers: 0, daemon: false}
         options = default_options # .merge(options)
 
-        conf = Rack::Handler::Puma.config(app, options)
+        puma_rack_handler = defined?(Rackup::Handler::Puma) ? Rackup::Handler::Puma : Rack::Handler::Puma
+        conf = puma_rack_handler.config(app, options)
         conf.clamp
         logger = (defined?(::Puma::LogWriter) ? ::Puma::LogWriter : ::Puma::Events).stdio
 
