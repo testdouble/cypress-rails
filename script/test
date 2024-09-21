@@ -6,10 +6,6 @@ set -x
 
 echo "---> Installing dependencies"
 bundle
-cd example
-bundle
-yarn
-cd ..
 
 echo "---> Running tests"
 bundle exec rake
