@@ -2,20 +2,27 @@
 
 set -e
 
-directory=$1
+run_example_tests() {
+  bundle
+  yarn install
+
+  # test a normal test run
+  bundle exec rake db:test:prepare
+  NODE_OPTIONS=--openssl-legacy-provider RAILS_ENV=test bundle exec rake assets:precompile
+  bundle exec rake cypress:run
+
+  # test that passing options works (by printing help)
+  if ! bundle exec rake cypress:run CYPRESS_RAILS_CYPRESS_OPTS="-h" | grep -q "Usage: cypress run \[options\]"; then
+    echo "Failed to pass options to cypress run"
+    exit 1
+  fi
+}
+
 
 cd example
-bundle
-yarn install
 
-# test a normal test run
-bundle exec rake db:test:prepare
-NODE_OPTIONS=--openssl-legacy-provider RAILS_ENV=test bundle exec rake assets:precompile
-bundle exec rake cypress:run
+echo "---> Running example tests with default Gemfile"
+run_example_tests
 
-# test that passing options works (by printing help)
-if ! bundle exec rake cypress:run CYPRESS_RAILS_CYPRESS_OPTS="-h" | grep -q "Usage: cypress run \[options\]"; then
-  echo "Failed to pass options to cypress run"
-  exit 1
-fi
-
+echo "---> Running example tests with Gemfile.rails71"
+BUNDLE_GEMFILE=Gemfile.rails71 run_example_tests
