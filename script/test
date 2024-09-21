@@ -13,7 +13,7 @@ cd ..
 
 echo "---> Running tests"
 bundle exec rake
-./script/test_example_app
+BUNDLE_GEMFILE="${1-Gemfile}" ./script/test_example_app
 
 bundle exec rake test
 

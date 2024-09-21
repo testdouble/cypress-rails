@@ -9,6 +9,11 @@ jobs:
     strategy:
       matrix:
         ruby-version: ['3.0', '3.3']
+        gemfile: ['Gemfile', 'Gemfile_rails71']
+        exclude:
+          # Rails 7.2 requires Ruby 3.1+
+          - ruby-version: '3.0'
+            gemfile: 'Gemfile'
 
     steps:
       - uses: actions/checkout@v4
@@ -18,4 +23,4 @@ jobs:
           bundler-cache: true
 
       - name: Run tests
-        run: ./script/test
+        run: ./script/test ${{matrix.gemfile}}
