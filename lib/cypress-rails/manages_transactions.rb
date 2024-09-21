@@ -55,7 +55,14 @@ module CypressRails
     def gather_connections
       setup_shared_connection_pool
 
-      ActiveRecord::Base.connection_handler.connection_pool_list.map(&:connection)
+      ActiveRecord::Base.connection_handler.connection_pool_list.map do |pool|
+        # Rails 7.2+
+        if pool.respond_to?(:lease_connection)
+          pool.lease_connection
+        else
+          pool.connection
+        end
+      end
     end
 
     # Shares the writing connection pool with connections on
