@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 0.8.0.rc1
+* Add compatibility with Rails 7.2
+
 ## 0.7.1
 * Add Rack 3.1 support [#163](https://github.com/testdouble/cypress-rails/pull/163)
 

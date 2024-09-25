@@ -2,8 +2,6 @@
 
 set -e
 
-directory=$1
-
 cd example
 bundle
 yarn install
@@ -18,4 +16,3 @@ if ! bundle exec rake cypress:run CYPRESS_RAILS_CYPRESS_OPTS="-h" | grep -q "Usa
   echo "Failed to pass options to cypress run"
   exit 1
 fi
-

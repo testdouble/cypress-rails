@@ -1,24 +1,19 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The example app has multiple, symlinked Gemfiles to be able to test against
+different dependency versions (so far just Rails).
 
-Things you may want to cover:
+For the latest version of Rails, you can just use all the default `bundle`
+commands:
+```
+bundle
+bundle exec rake cypress:run
+```
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+For previous version(s) of Rails, you need to specify the Gemfile to use. So
+for `Gemfile_rails71` (which uses Rails 7.1), you'll need to include an env var
+when you use `bundle` commands:
+```
+BUNDLE_GEMFILE=Gemfile_rails71 bundle
+BUNDLE_GEMFILE=Gemfile_rails71 bundle exec rake cypress:run
+```
