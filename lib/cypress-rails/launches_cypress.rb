@@ -2,13 +2,14 @@ require_relative "finds_bin"
 require_relative "config"
 require_relative "initializer_hooks"
 require_relative "manages_transactions"
+require_relative "manages_transactions_before_rails72"
 require_relative "starts_rails_server"
 
 module CypressRails
   class LaunchesCypress
     def initialize
       @initializer_hooks = InitializerHooks.instance
-      @manages_transactions = ManagesTransactions.instance
+      @manages_transactions = manages_transactions_instance
       @starts_rails_server = StartsRailsServer.new
       @finds_bin = FindsBin.new
     end
@@ -37,6 +38,14 @@ module CypressRails
     end
 
     private
+
+    def manages_transactions_instance
+      if Gem::Version.new(Rails.version) >= Gem::Version.new("7.2")
+        ManagesTransactions.instance
+      else
+        ManagesTransactionsBeforeRails72.instance
+      end
+    end
 
     def set_exit_hooks!(config)
       at_exit do

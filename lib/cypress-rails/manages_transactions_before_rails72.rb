@@ -1,50 +1,50 @@
 require_relative "initializer_hooks"
 
 module CypressRails
-  class ManagesTransactions
+  class ManagesTransactionsBeforeRails72
     def self.instance
       @instance ||= new
     end
 
     def begin_transaction
-      setup_shared_connection_pool
-
-      # Begin transactions for connections already established
-      @connection_pools = ActiveRecord::Base.connection_handler.connection_pools(:writing)
-      @connection_pools.each do |pool|
-        pool.pin_connection!(true)
-        pool.lease_connection
+      @connections = gather_connections
+      @connections.each do |connection|
+        connection.begin_transaction joinable: false, _lazy: false
+        connection.pool.lock_thread = true
       end
 
       # When connections are established in the future, begin a transaction too
-      @connection_subscriber = ActiveSupport::Notifications.subscribe("!connection.active_record") do |_, _, _, _, payload|
+      @connection_subscriber = ActiveSupport::Notifications.subscribe("!connection.active_record") { |_, _, _, _, payload|
         if payload.key?(:spec_name) && (spec_name = payload[:spec_name])
+          setup_shared_connection_pool
 
-          if spec_name
-            pool = ActiveRecord::Base.connection_handler.retrieve_connection_pool(spec_name)
-            if pool
-              setup_shared_connection_pool
+          begin
+            connection = ActiveRecord::Base.connection_handler.retrieve_connection(spec_name)
+          rescue ActiveRecord::ConnectionNotEstablished
+            connection = nil
+          end
 
-              unless @connection_pools.include?(pool)
-                pool.pin_connection!(true)
-                pool.lease_connection
-                @connection_pools << pool
-              end
-            end
+          if connection && !@connections.include?(connection)
+            connection.begin_transaction joinable: false, _lazy: false
+            connection.pool.lock_thread = true
+            @connections << connection
           end
         end
-      end
+      }
 
       @initializer_hooks.run(:after_transaction_start)
     end
 
     def rollback_transaction
-      ActiveRecord::Base.asynchronous_queries_tracker.finalize_session
+      return unless @connections.present?
+
       ActiveSupport::Notifications.unsubscribe(@connection_subscriber) if @connection_subscriber
 
-      return unless @connection_pools.any?(&:active_connection?)
-      @connection_pools.map(&:unpin_connection!)
-      @connection_pools.clear
+      @connections.each do |connection|
+        connection.rollback_transaction if connection.transaction_open?
+        connection.pool.lock_thread = false
+      end
+      @connections.clear
 
       ActiveRecord::Base.connection_handler.clear_active_connections!
     end
