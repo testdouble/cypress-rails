@@ -37,6 +37,7 @@ end
 
 CypressRails.hooks.before_server_stop do
   DatabaseCleaner.clean
+  ExternalService.stop_service
   # Purge and reload the test database so we don't leave our fixtures in there
   Rake::Task["db:test:prepare"].invoke
 end
