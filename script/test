@@ -11,11 +11,15 @@ bundle
 yarn
 cd ..
 
-echo "---> Running tests"
+echo "---> Running root tests"
 bundle exec rake
-./script/test_example_app
 
-bundle exec rake test
+for gemfile in example/gemfiles/*.gemfile; do
+  echo "---> Running example app tests against $gemfile"
+  export BUNDLE_GEMFILE="$PWD/$gemfile"
+  (cd example && bundle) # ensure that gemfile's lockfile is installed
+  ./script/test_example_app
+  unset BUNDLE_GEMFILE
+done
 
 echo "---> Job's done!"
-
