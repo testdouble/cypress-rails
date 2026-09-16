@@ -25,7 +25,7 @@ CypressRails.hooks.after_server_start do
   ExternalService.start_service
 end
 
-CypressRails.hooks.after_state_reset do
+CypressRails.hooks.after_reset_requested do
   DatabaseCleaner.clean
   DatabaseCleaner.start
   seed_compliments!

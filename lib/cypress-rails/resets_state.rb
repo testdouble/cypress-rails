@@ -8,7 +8,7 @@ module CypressRails
     end
 
     def call
-      @initializer_hooks.run(:after_state_reset)
+      @initializer_hooks.run(:after_reset_requested)
     end
   end
 end
