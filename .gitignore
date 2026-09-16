@@ -6,3 +6,8 @@
 /pkg/
 /spec/reports/
 /tmp/
+
+# Appraisal gemfile lockfiles are Ruby-version-sensitive (transitive deps can
+# pin versions requiring a newer Ruby than some cells of the CI matrix), so
+# each job resolves and caches its own instead of sharing a committed lock.
+/example/gemfiles/*.gemfile.lock
