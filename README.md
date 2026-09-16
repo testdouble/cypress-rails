@@ -93,26 +93,39 @@ is a JavaScript-based tool and can't easily manipulate your Rails app directly,
 cypress-rails provides a number of hooks that you can use to manage your test
 data.
 
+cypress-rails itself has no opinion on *how* you reset your database between
+tests. Instead, cypress-rails gives you a hook (`after_reset_requested`) to run
+whatever database-cleaning approach fits your app, such as the
+[database_cleaner](https://github.com/DatabaseCleaner/database_cleaner) gem.
+
 Here's what a `config/initializers/cypress_rails.rb` initializer might look
-like:
+like, using `database_cleaner-active_record`'s transaction strategy:
 
 ```ruby
 return unless Rails.env.test?
 
+require "database_cleaner/active_record"
+DatabaseCleaner.strategy = :transaction
+
 CypressRails.hooks.before_server_start do
-  # Called once, before either the transaction or the server is started
+  # Called once, before the server is started
+  DatabaseCleaner.start
 end
 
-CypressRails.hooks.after_transaction_start do
-  # Called after the transaction is started (at launch and after each reset)
+CypressRails.hooks.after_server_start do
+  # Called once, after the server has booted
 end
 
-CypressRails.hooks.after_state_reset do
-  # Triggered after `/cypress_rails_reset_state` is called
+CypressRails.hooks.after_reset_requested do
+  # Triggered after `/cypress_rails_reset_state` is called - this is your
+  # chance to actually reset the database
+  DatabaseCleaner.clean
+  DatabaseCleaner.start
 end
 
 CypressRails.hooks.before_server_stop do
   # Called once, at_exit
+  DatabaseCleaner.clean
 end
 ```
 
@@ -122,15 +135,9 @@ initializer](/example/config/initializers/cypress_rails_initializer.rb)
 in this repo.)
 
 The gem also provides a special route on the test server:
-`/cypress_rails_reset_state`. Each time it's called, cypress-rails will do
-two things at the beginning of the next request received by the Rails app:
-
-* If `CYPRESS_RAILS_TRANSACTIONAL_SERVER` is enabled, roll back the transaction,
-effectively resetting the application state to whatever it was at the start of
-the test run
-
-* Trigger any `after_state_reset` hooks you've configured (regardless of the
-  transactional server setting)
+`/cypress_rails_reset_state`. Each time it's called, cypress-rails will
+trigger any `after_reset_requested` hooks you've configured at the beginning
+of the next request received by the Rails app.
 
 This way, you can easily instruct the server to reset its test state from your
 Cypress tests like so:
@@ -164,10 +171,6 @@ preferred environment variables project-wide using a tool like
   requests to the app (e.g. via `cy.visit()`). If you've customized your
   `baseUrl` setting (e.g. in `cypress.config.js`), you'll need to duplicate it with
   this environment variable
-* **CYPRESS_RAILS_TRANSACTIONAL_SERVER** (default: `true`) when true, will start
-  a transaction on all database connections before launching the server. In
-  general this means anything done during `cypress open` or `cypress run` will
-  be rolled back on exit (similar to running a Rails System test)
 * **CYPRESS_RAILS_CYPRESS_OPTS** (default: _none_) any options you want to
   forward to the Cypress CLI when running its `open` or `run` commands.
 
@@ -193,28 +196,24 @@ $ CYPRESS_RAILS_CYPRESS_OPTS="--browser chromium" bin/rake cypress:run
 ### before_server_start
 
 Pass a block to `CypressRails.hooks.before_server_start` to register a hook that
-will execute before the server or any transaction has been started. If you use
-Rails fixtures, it may make sense to load them here, so they don't need to be
-re-inserted for each request
+will execute before the server has been started. If you use Rails fixtures, it
+may make sense to load them here, so they don't need to be re-inserted for each
+request. This is also a good place to start whatever database-cleaning strategy
+you're using (e.g. `DatabaseCleaner.start`).
 
 ### after_server_start
 
 Pass a block to `CypressRails.hooks.after_server_start` to register a hook that
 will execute after the server has booted.
 
-### after_transaction_start
-
-If there's any custom behavior or state management you want to do inside the
-transaction (so that it's also rolled back each time a reset is triggered),
-pass a block to `CypressRails.hooks.after_transaction_start`.
-
-### after_state_reset
+### after_reset_requested
 
 Every time the test server receives an HTTP request at
-`/cypress_rails_reset_state`, the transaction will be rolled back (if
-`CYPRESS_RAILS_TRANSACTIONAL_SERVER` is enabled) and the `after_state_reset`
-hook will be triggered. To set up the hook, pass a block to
-`CypressRails.hooks.after_state_reset`.
+`/cypress_rails_reset_state`, the `after_reset_requested` hook will be
+triggered at the start of the next request. This is where you should actually
+reset your database (e.g. `DatabaseCleaner.clean` followed by
+`DatabaseCleaner.start`) - cypress-rails does not reset any state on its own.
+To set up the hook, pass a block to `CypressRails.hooks.after_reset_requested`.
 
 ### before_server_stop
 

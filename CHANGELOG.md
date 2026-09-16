@@ -1,10 +1,27 @@
 # CHANGELOG
 
+## 0.8.0
+
+* **[Breaking]** Remove `CYPRESS_RAILS_TRANSACTIONAL_SERVER`. cypress-rails no
+  longer wraps the server in a transaction or resets it between tests -
+  automatic Rails-version-specific transaction management proved unsustainable
+  to maintain (see [#164](https://github.com/testdouble/cypress-rails/issues/164),
+  [#161](https://github.com/testdouble/cypress-rails/issues/161)). Apps must
+  now reset their own state (e.g. with `database_cleaner`) using the
+  `after_reset_requested` hook; see the example app for a working setup
+* **[Breaking]** Remove the `after_transaction_start` hook, since cypress-rails
+  no longer manages transactions
+* **[Breaking]** Rename the `after_state_reset` hook to `after_reset_requested`.
+  It now fires whenever a reset was requested (via hitting
+  `/cypress_rails_reset_state`), rather than after cypress-rails had already
+  performed one - the app is expected to perform the reset itself in this hook
+* **[Breaking]** Remove `CypressRails::Config#transactional_server`
+* Add Rails 7.2 / 8.0 support
+
 ## 0.7.1
 * Add Rack 3.1 support [#163](https://github.com/testdouble/cypress-rails/pull/163)
 
 ## 0.7.0
-git
 * Add a `CYPRESS_RAILS_CYPRESS_DIR` option for cases where
 the cypress tests live outside the CYPRESS_RAILS_DIR [#159](https://github.com/testdouble/cypress-rails/pull/159)
 
