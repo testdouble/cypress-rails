@@ -3,17 +3,17 @@ require_relative "server"
 
 module CypressRails
   class StartsRailsServer
-    def call(host:, port:, transactional_server:)
-      configure_rails_to_run_our_state_reset_on_every_request!(transactional_server)
+    def call(host:, port:)
+      configure_rails_to_run_our_state_reset_on_every_request!
       app = create_rack_app
       Server.new(app, host: host, port: port).tap do |server|
         server.boot
       end
     end
 
-    def configure_rails_to_run_our_state_reset_on_every_request!(transactional_server)
+    def configure_rails_to_run_our_state_reset_on_every_request!
       Rails.application.executor.to_run do
-        TracksResets.instance.reset_state_if_needed(transactional_server)
+        TracksResets.instance.reset_state_if_needed
       end
     end
 

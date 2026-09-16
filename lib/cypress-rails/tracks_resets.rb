@@ -10,9 +10,9 @@ module CypressRails
       @reset_needed = true
     end
 
-    def reset_state_if_needed(transactional_server)
+    def reset_state_if_needed
       if @reset_needed
-        ResetsState.new.call(transactional_server: transactional_server)
+        ResetsState.new.call
         @reset_needed = false
       end
     end

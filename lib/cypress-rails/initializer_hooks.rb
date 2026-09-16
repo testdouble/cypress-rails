@@ -16,10 +16,6 @@ module CypressRails
       register(:after_server_start, blk)
     end
 
-    def after_transaction_start(&blk)
-      register(:after_transaction_start, blk)
-    end
-
     def after_state_reset(&blk)
       register(:after_state_reset, blk)
     end
