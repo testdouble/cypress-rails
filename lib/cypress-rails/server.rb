@@ -23,7 +23,9 @@ module CypressRails
       host:,
       port:,
       reportable_errors: [Exception],
-      extra_middleware: [])
+      extra_middleware: [],
+      initializer_hooks: InitializerHooks.instance,
+      puma: Puma)
       @app = app
       @extra_middleware = extra_middleware
       @server_thread = nil # suppress warnings
@@ -33,7 +35,8 @@ module CypressRails
       @port ||= Server.ports[port_key]
       @port ||= find_available_port(host)
       @checker = Checker.new(@host, @port)
-      @initializer_hooks = InitializerHooks.instance
+      @initializer_hooks = initializer_hooks
+      @puma = puma
     end
 
     def reset_error!
@@ -72,7 +75,7 @@ module CypressRails
         Server.ports[port_key] = port
 
         @server_thread = Thread.new {
-          Puma.create(middleware, port, host)
+          @puma.create(middleware, port, host)
         }
 
         timer = Timer.new(60)
@@ -80,8 +83,10 @@ module CypressRails
           raise "Rack application timed out during boot" if timer.expired?
 
           @server_thread.join(0.1)
-          @initializer_hooks.run(:after_server_start)
         end
+
+        # Once the server is up, so slow hooks don't count against the timeout
+        @initializer_hooks.run(:after_server_start)
       end
 
       self
