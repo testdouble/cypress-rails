@@ -4,39 +4,44 @@ require "database_cleaner/active_record"
 
 Rails.application.load_tasks unless defined?(Rake::Task)
 
-DatabaseCleaner.strategy = :transaction
-
 def seed_compliments!
-  # After each resettable transaction starts, add this compliment (it will
-  # be rolled back on the next reset)
-  Compliment.create(text: "You are courageous")
+  Compliment.create!(text: "You are courageous")
 end
 
 CypressRails.hooks.before_server_start do
-  # Add our fixtures before the resettable transaction is started
+  # Loaded before the transaction starts, so these persist across resets
   Rake::Task["db:fixtures:load"].invoke
-
-  DatabaseCleaner.start
-  seed_compliments!
 end
 
 CypressRails.hooks.after_server_start do
-  # Start up external service
   ExternalService.start_service
 end
 
-CypressRails.hooks.after_reset_requested do
-  DatabaseCleaner.clean
-  DatabaseCleaner.start
-  seed_compliments!
+if CypressRails::Config.new.transactional_server
+  CypressRails.hooks.after_transaction_start do
+    # Runs inside the transaction at launch and after every reset, so it's
+    # rolled back each time
+    seed_compliments!
+  end
+else
+  CypressRails.hooks.after_state_reset do
+    # Without the transactional server, the app rebuilds its own data.
+    # clean_with uses a fresh truncation strategy on every call, and
+    # reset_cache stops the fixtures from being skipped as already loaded.
+    DatabaseCleaner[:active_record].clean_with(:truncation)
+    ActiveRecord::FixtureSet.reset_cache
+    ActiveRecord::FixtureSet.create_fixtures(Rails.root.join("test/fixtures"), ["compliments"])
+    seed_compliments!
+  end
+end
 
+CypressRails.hooks.after_state_reset do
   if Compliment.count != 4
     raise "Wait I was expecting exactly 4 compliments!"
   end
 end
 
 CypressRails.hooks.before_server_stop do
-  DatabaseCleaner.clean
   ExternalService.stop_service
   # Purge and reload the test database so we don't leave our fixtures in there
   Rake::Task["db:test:prepare"].invoke

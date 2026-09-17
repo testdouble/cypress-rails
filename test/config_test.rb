@@ -30,6 +30,16 @@ class ConfigTest < Minitest::Test
     end
   end
 
+  def test_that_transactional_server_is_on_by_default
+    assert_equal(true, CypressRails::Config.new.transactional_server)
+  end
+
+  def test_that_transactional_server_can_be_turned_off
+    mock_env("CYPRESS_RAILS_TRANSACTIONAL_SERVER" => "false") do
+      assert_equal(false, CypressRails::Config.new.transactional_server)
+    end
+  end
+
   private
 
   def mock_env(partial_env_hash)
