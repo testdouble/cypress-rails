@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.9.1
+
+* Add `CYPRESS_RAILS_SERVER_THREADS` (default: `"0:4"`) to configure the min:max
+  thread count passed to Puma's `Threads:` option, so you can e.g. set it to
+  `"1:1"` for single-threaded mode.
+
 ## 0.9.0
 
 * **[Breaking]** Require Rails 7.1 or newer
