@@ -1,28 +1,26 @@
-require_relative "tracks_resets"
+require_relative "resets_state"
 require_relative "server"
 
 module CypressRails
   class StartsRailsServer
-    def call(host:, port:)
-      configure_rails_to_run_our_state_reset_on_every_request!
-      app = create_rack_app
+    def call(host:, port:, transactional_server:)
+      app = create_rack_app(transactional_server)
       Server.new(app, host: host, port: port).tap do |server|
         server.boot
       end
     end
 
-    def configure_rails_to_run_our_state_reset_on_every_request!
-      Rails.application.executor.to_run do
-        TracksResets.instance.reset_state_if_needed
-      end
-    end
-
-    def create_rack_app
+    def create_rack_app(transactional_server)
       Rack::Builder.new do
         map "/cypress_rails_reset_state" do
           run lambda { |env|
-            TracksResets.instance.reset_needed!
-            [202, {"Content-Type" => "text/plain"}, ["Accepted"]]
+            begin
+              ResetsState.new(transactional_server: transactional_server).call
+              [200, {"content-type" => "text/plain"}, ["Reset"]]
+            rescue => e
+              warn e.full_message
+              [500, {"content-type" => "text/plain"}, ["#{e.class}: #{e.message}"]]
+            end
           }
         end
         map "/" do

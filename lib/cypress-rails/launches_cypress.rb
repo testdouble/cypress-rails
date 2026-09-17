@@ -1,6 +1,7 @@
 require_relative "finds_bin"
 require_relative "config"
 require_relative "initializer_hooks"
+require_relative "manages_transactions"
 require_relative "starts_rails_server"
 
 module CypressRails
@@ -14,9 +15,14 @@ module CypressRails
     def call(command, config)
       puts config
       @initializer_hooks.run(:before_server_start)
+      if config.transactional_server
+        ManagesTransactions.instance.begin_transaction
+        @initializer_hooks.run(:after_transaction_start)
+      end
       server = @starts_rails_server.call(
         host: config.host,
-        port: config.port
+        port: config.port,
+        transactional_server: config.transactional_server
       )
       bin = @finds_bin.call(config.cypress_dir)
 
@@ -46,6 +52,13 @@ module CypressRails
       @at_exit_hooks_have_fired ||= false # avoid warning
       return if @at_exit_hooks_have_fired
 
+      if config.transactional_server
+        begin
+          ManagesTransactions.instance.rollback_transaction
+        rescue => e
+          warn e.full_message
+        end
+      end
       @initializer_hooks.run(:before_server_stop)
 
       @at_exit_hooks_have_fired = true
