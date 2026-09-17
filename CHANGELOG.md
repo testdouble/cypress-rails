@@ -1,6 +1,25 @@
 # CHANGELOG
 
+## 0.9.0
+
+* **[Breaking]** Require Rails 7.1 or newer
+* **[Breaking]** (relative to 0.8.0) Rename `after_reset_requested` back to
+  `after_state_reset`, and restore the transactional server as the default
+  behavior
+* Bring back the transactional server (and `CYPRESS_RAILS_TRANSACTIONAL_SERVER`),
+  which 0.8.0 had removed. It didn't work reliably to have apps reset their own
+  state under cypress-rails' multi-threaded Puma server
+* `/cypress_rails_reset_state` now resets before responding (returning `200`
+  instead of `202`), rather than deferring the reset to the next request
+
+See [docs/changes-in-0.9.0.md](docs/changes-in-0.9.0.md) for a full comparison
+with both 0.7.1 and 0.8.0.
+
 ## 0.8.0
+
+(Avoid this version due to issues with resetting data during threaded requests.
+0.9.0 is almost entirely compatible with 0.7.1 while still bringing Rails 7.2+
+compatibility, so the breaking changes in this version are for nothing.)
 
 * **[Breaking]** Remove `CYPRESS_RAILS_TRANSACTIONAL_SERVER`. cypress-rails no
   longer wraps the server in a transaction or resets it between tests -
