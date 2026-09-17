@@ -3,9 +3,9 @@ require_relative "server"
 
 module CypressRails
   class StartsRailsServer
-    def call(host:, port:, transactional_server:)
+    def call(host:, port:, transactional_server:, server_threads:)
       app = create_rack_app(transactional_server)
-      Server.new(app, host: host, port: port).tap do |server|
+      Server.new(app, host: host, port: port, threads: server_threads).tap do |server|
         server.boot
       end
     end

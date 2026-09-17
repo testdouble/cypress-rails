@@ -5,17 +5,18 @@ require "cypress-rails/server"
 class ServerTest < Minitest::Test
   # Starts a real Puma, optionally after a delay, so boot has to poll for it
   class SlowPuma
-    attr_reader :threads
+    attr_reader :threads, :received_threads_option
 
     def initialize(delay: 0)
       @delay = delay
       @threads = []
     end
 
-    def create(app, port, host)
+    def create(app, port, host, threads)
+      @received_threads_option = threads
       @threads << Thread.current
       sleep @delay
-      CypressRails::Server::Puma.create(app, port, host)
+      CypressRails::Server::Puma.create(app, port, host, threads)
     end
   end
 
@@ -59,6 +60,29 @@ class ServerTest < Minitest::Test
     server.boot
 
     assert_equal(1, @calls)
+  end
+
+  def test_boot_passes_the_configured_threads_option_to_puma
+    puma = SlowPuma.new
+    @pumas << puma
+    server = CypressRails::Server.new(
+      ->(env) { [200, {"content-type" => "text/plain"}, ["ok"]] },
+      host: "127.0.0.1",
+      port: nil,
+      initializer_hooks: @hooks,
+      puma: puma,
+      threads: "1:1"
+    )
+
+    Timeout.timeout(10) { server.boot }
+
+    assert_equal("1:1", puma.received_threads_option)
+  end
+
+  def test_boot_defaults_threads_to_0_4_when_not_specified
+    boot
+
+    assert_equal("0:4", @pumas.last.received_threads_option)
   end
 
   private

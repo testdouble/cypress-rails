@@ -1,14 +1,12 @@
 module CypressRails
   class Server
     module Puma
-      def self.create(app, port, host)
+      def self.create(app, port, host, threads = "0:4")
         require "rack/handler/puma"
 
         # If we just run the Puma Rack handler it installs signal handlers which prevent us from being able to interrupt tests.
         # Therefore construct and run the Server instance ourselves.
-        # Rack::Handler::Puma.run(app, { Host: host, Port: port, Threads: "0:4", workers: 0, daemon: false }.merge(options))
-        default_options = {Host: host, Port: port, Threads: "0:4", workers: 0, daemon: false}
-        options = default_options # .merge(options)
+        options = {Host: host, Port: port, Threads: threads, workers: 0, daemon: false}
 
         puma_rack_handler = defined?(Rackup::Handler::Puma) ? Rackup::Handler::Puma : Rack::Handler::Puma
         conf = puma_rack_handler.config(app, options)
