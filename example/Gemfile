@@ -2,7 +2,7 @@ source "https://rubygems.org"
 
 gem "sqlite3"
 gem "puma"
-gem "webpacker"
+gem "shakapacker"
 gem "bootsnap", require: false
 
 group :development, :test do

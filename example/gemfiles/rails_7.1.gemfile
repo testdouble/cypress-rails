@@ -4,7 +4,7 @@ source "https://rubygems.org"
 
 gem "sqlite3"
 gem "puma"
-gem "webpacker"
+gem "shakapacker"
 gem "bootsnap", require: false
 gem "rails", "~> 7.1.0"
 
