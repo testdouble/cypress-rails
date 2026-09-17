@@ -40,6 +40,16 @@ class ConfigTest < Minitest::Test
     end
   end
 
+  def test_that_server_threads_defaults_to_0_4
+    assert_equal("0:4", CypressRails::Config.new.server_threads)
+  end
+
+  def test_that_server_threads_can_be_set_via_env
+    mock_env("CYPRESS_RAILS_SERVER_THREADS" => "1:1") do
+      assert_equal("1:1", CypressRails::Config.new.server_threads)
+    end
+  end
+
   private
 
   def mock_env(partial_env_hash)

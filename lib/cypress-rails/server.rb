@@ -25,7 +25,8 @@ module CypressRails
       reportable_errors: [Exception],
       extra_middleware: [],
       initializer_hooks: InitializerHooks.instance,
-      puma: Puma)
+      puma: Puma,
+      threads: "0:4")
       @app = app
       @extra_middleware = extra_middleware
       @server_thread = nil # suppress warnings
@@ -37,6 +38,7 @@ module CypressRails
       @checker = Checker.new(@host, @port)
       @initializer_hooks = initializer_hooks
       @puma = puma
+      @threads = threads
     end
 
     def reset_error!
@@ -75,7 +77,7 @@ module CypressRails
         Server.ports[port_key] = port
 
         @server_thread = Thread.new {
-          @puma.create(middleware, port, host)
+          @puma.create(middleware, port, host, @threads)
         }
 
         timer = Timer.new(60)

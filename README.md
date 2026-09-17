@@ -216,6 +216,10 @@ preferred environment variables project-wide using a tool like
   transactional server](#turning-off-the-transactional-server)
 * **CYPRESS_RAILS_CYPRESS_OPTS** (default: _none_) any options you want to
   forward to the Cypress CLI when running its `open` or `run` commands.
+* **CYPRESS_RAILS_SERVER_THREADS** (default: `"0:4"`) the min:max thread count
+  passed to Puma's `Threads:` option when cypress-rails boots its own test
+  server. Set to `"1:1"` for single-threaded mode. This is independent of your
+  app's `config/puma.rb`, which cypress-rails does not read.
 
 #### Example: Running a single spec from the command line
 
