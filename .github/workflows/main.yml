@@ -38,8 +38,24 @@ jobs:
           - ruby-version: '3.1'
             rails-version: '8.0'
 
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/example/gemfiles/rails_${{ matrix.rails-version }}.gemfile
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
 
     steps:
       - uses: actions/checkout@v4
