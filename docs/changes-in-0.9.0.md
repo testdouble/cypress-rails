@@ -90,14 +90,14 @@ to the next request.
 `200` replaces `202` because `202 Accepted` means "received, will be processed
 later", which is no longer true.
 
-### 3. `after_server_start` runs once (bug fix, planned)
+### 3. `after_server_start` runs once (bug fix)
 
-Once [#186](https://github.com/testdouble/cypress-rails/issues/186) is fixed,
-`after_server_start` hooks run exactly once, after the server is responding.
-Before, they ran once per 0.1-second boot poll: several times on a slow boot,
-and in principle not at all if the server responded on the first check. The
-hooks still finish before Cypress launches. Hooks that are slow also no longer
-count against the 60-second boot timeout.
+`after_server_start` hooks now run exactly once, after the server is responding
+([#186](https://github.com/testdouble/cypress-rails/issues/186)). Before, they
+ran once per 0.1-second boot poll: several times on a slow boot, and in
+principle not at all if the server responded on the first check. The hooks
+still finish before Cypress launches. Hooks that are slow also no longer count
+against the 60-second boot timeout.
 
 ## Relative to 0.8.0
 
