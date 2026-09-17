@@ -1,25 +1,27 @@
-# SQLite. Versions 3.8.0 and up are supported.
-#   gem install sqlite3
+# PostgreSQL. Versions 9.3 and up are supported.
 #
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'sqlite3'
+#   Ensure the PostgreSQL gem is defined in your Gemfile
+#   gem 'pg'
 #
 default: &default
-  adapter: sqlite3
+  adapter: postgresql
+  encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
+  host: <%= ENV.fetch("PGHOST", "localhost") %>
+  username: <%= ENV.fetch("PGUSER") { ENV["USER"] } %>
+  password: <%= ENV.fetch("PGPASSWORD", "") %>
 
 development:
   <<: *default
-  database: db/development.sqlite3
+  database: an_app_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: db/test.sqlite3
+  database: an_app_test
 
 production:
   <<: *default
-  database: db/production.sqlite3
+  database: an_app_production
