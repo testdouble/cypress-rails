@@ -1,5 +1,7 @@
 module CypressRails
   class Init
+    CONFIG_EXTENSIONS = %w[js ts mjs cjs mts cts]
+
     DEFAULT_CONFIG = <<~JS
       const { defineConfig } = require('cypress')
 
@@ -20,12 +22,13 @@ module CypressRails
     JS
 
     def call(cypress_dir = Config.new.cypress_dir)
-      config_path = File.join(cypress_dir, "cypress.config.js")
-      if !File.exist?(config_path)
+      existing_config_path = Dir.glob(File.join(cypress_dir, "cypress.config.{#{CONFIG_EXTENSIONS.join(",")}}")).first
+      if existing_config_path
+        warn "Cypress config already exists in `#{existing_config_path}'. Skipping."
+      else
+        config_path = File.join(cypress_dir, "cypress.config.js")
         File.write(config_path, DEFAULT_CONFIG)
         puts "Cypress config initialized in `#{config_path}'"
-      else
-        warn "Cypress config already exists in `#{config_path}'. Skipping."
       end
     end
   end
