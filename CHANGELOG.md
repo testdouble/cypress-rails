@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.9.2
+
+* Fix `rake cypress:init` so it recognizes an existing Cypress config file of
+  any supported extension (`.js`, `.ts`, `.mjs`, `.cjs`, `.mts`, `.cts`)
+  instead of only `cypress.config.js` [#170](https://github.com/testdouble/cypress-rails/issues/170)
+
 ## 0.9.1
 
 * Add `CYPRESS_RAILS_SERVER_THREADS` (default: `"0:4"`) to configure the min:max
