@@ -1,7 +1,7 @@
 require "pathname"
 CLI = Pathname.new(File.dirname(__FILE__)).join("../../exe/cypress-rails")
 
-desc "Initialize cypress.config.js"
+desc "Initialize Cypress config"
 task :"cypress:init" do
   system "#{CLI} init"
 end
