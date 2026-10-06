@@ -294,57 +294,6 @@ config.cache_classes = false
 config.action_view.cache_template_loading = false
 ```
 
-## Setting up continuous integration
-
-#### Circle CI
-
-Nowadays, Cypress and Circle get along pretty well without much customization.
-The only tricky bit is that Cypress will install its large-ish binary to
-`~/.cache/Cypress`, so if you cache your dependencies, you'll want to include
-that path:
-
-```yml
-version: 2
-jobs:
-  build:
-    docker:
-      - image: circleci/ruby:2.6-node-browsers
-      - image: circleci/postgres:9.4.12-alpine
-        environment:
-          POSTGRES_USER: circleci
-    steps:
-      - checkout
-
-      # Bundle install dependencies
-      - type: cache-restore
-        key: v1-gems-{{ checksum "Gemfile.lock" }}
-
-      - run: bundle install --path vendor/bundle
-
-      - type: cache-save
-        key: v1-gems-{{ checksum "Gemfile.lock" }}
-        paths:
-          - vendor/bundle
-
-      # Yarn dependencies
-      - restore_cache:
-          keys:
-            - v1-yarn-{{ checksum "yarn.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-yarn-
-
-      - run: yarn install
-
-      - save_cache:
-          paths:
-            - node_modules
-            - ~/.cache
-          key: v1-yarn-{{ checksum "yarn.lock" }}
-
-      # Run your cypress tests
-      - run: bin/rake cypress:run
-```
-
 ## Why use this?
 
 Rails ships with a perfectly competent browser-testing facility called [system
