@@ -85,6 +85,48 @@ command:
 $ rake cypress:run
 ```
 
+### Building your assets before running tests
+
+cypress-rails doesn't build your front-end assets. If your app bundles
+JavaScript or CSS, build it for the test environment before Cypress starts.
+If you don't, you'll likely see one of two symptoms:
+
+* The first spec or two time out (e.g. `ESOCKETTIMEDOUT`) while the rest pass.
+  Bundlers that compile on demand (like Shakapacker or Vite Ruby) are building
+  during that first page load
+* Every `cy.visit` fails with a 500 because a pack or entrypoint is missing from
+  the manifest
+
+You know your app's setup best, but the right command is usually one of these:
+
+* **jsbundling-rails, cssbundling-rails, tailwindcss-rails, or dartsass-rails**:
+  `bin/rails test:prepare`
+* **Shakapacker or Vite Ruby**: `RAILS_ENV=test bin/rails assets:precompile`.
+  Don't forget `RAILS_ENV=test`. These bundlers write test builds to a separate
+  directory from development and production ones
+
+```sh
+$ RAILS_ENV=test bin/rails assets:precompile
+$ rake cypress:run
+```
+
+If you'd rather not remember to do this when running `rake cypress:open`, you
+can build your assets from a [before_server_start](#before_server_start) hook
+instead. This only helps if your bundler hooks into `test:prepare` (see the list
+above). Shakapacker and Vite Ruby don't, so with them this hook won't build
+anything:
+
+```ruby
+CypressRails.hooks.before_server_start do
+  system("bin/rails test:prepare", exception: true)
+end
+```
+
+Register this hook before any others, because hooks run in the order they're
+registered. If the build fails, cypress-rails exits before Cypress launches and
+skips your `before_server_stop` hooks. Anything an earlier hook did (like
+loading fixtures) won't get cleaned up.
+
 ## Managing your test data
 
 The tricky thing about browser tests is that they usually depend on some test
