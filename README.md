@@ -85,6 +85,48 @@ command:
 $ rake cypress:run
 ```
 
+### Building your assets before running tests
+
+cypress-rails doesn't build your front-end assets. If your app bundles
+JavaScript or CSS, build it for the test environment before Cypress starts.
+If you don't, you'll likely see one of two symptoms:
+
+* The first spec or two time out (e.g. `ESOCKETTIMEDOUT`) while the rest pass.
+  Bundlers that compile on demand (like Shakapacker or Vite Ruby) are building
+  during that first page load
+* Every `cy.visit` fails with a 500 because a pack or entrypoint is missing from
+  the manifest
+
+You know your app's setup best, but the right command is usually one of these:
+
+* **jsbundling-rails, cssbundling-rails, tailwindcss-rails, or dartsass-rails**:
+  `bin/rails test:prepare`
+* **Shakapacker or Vite Ruby**: `RAILS_ENV=test bin/rails assets:precompile`.
+  Don't forget `RAILS_ENV=test`. These bundlers write test builds to a separate
+  directory from development and production ones
+
+```sh
+$ RAILS_ENV=test bin/rails assets:precompile
+$ rake cypress:run
+```
+
+If you'd rather not remember to do this when running `rake cypress:open`, you
+can build your assets from a [before_server_start](#before_server_start) hook
+instead. This only helps if your bundler hooks into `test:prepare` (see the list
+above). Shakapacker and Vite Ruby don't, so with them this hook won't build
+anything:
+
+```ruby
+CypressRails.hooks.before_server_start do
+  system("bin/rails test:prepare", exception: true)
+end
+```
+
+Register this hook before any others, because hooks run in the order they're
+registered. If the build fails, cypress-rails exits before Cypress launches and
+skips your `before_server_stop` hooks. Anything an earlier hook did (like
+loading fixtures) won't get cleaned up.
+
 ## Managing your test data
 
 The tricky thing about browser tests is that they usually depend on some test
@@ -179,14 +221,14 @@ A few things to watch out for:
   transaction on one of the server's database connections, so requests served
   on other connections save their changes for real, and those changes survive
   the reset. (On SQLite, the open transaction also makes other connections'
-  writes fail with "database is locked" errors.)
+  writes fail with "database is locked" errors)
 * Don't set `DatabaseCleaner.strategy = ...` at the top of an initializer.
   Before ActiveRecord has loaded, that assignment is silently ignored and
-  database_cleaner's default `:transaction` strategy is used instead.
+  database_cleaner's default `:transaction` strategy is used instead
 * Truncation removes everything, including data loaded in
   `before_server_start`, so rebuild whatever your tests need in the hook. Call
   `ActiveRecord::FixtureSet.reset_cache` before reloading fixtures, or they'll
-  be skipped as already loaded.
+  be skipped as already loaded
 
 ## Configuration
 
@@ -292,57 +334,6 @@ To illustrate, here's what that might look like in `config/environments/test.rb`
 ```ruby
 config.cache_classes = false
 config.action_view.cache_template_loading = false
-```
-
-## Setting up continuous integration
-
-#### Circle CI
-
-Nowadays, Cypress and Circle get along pretty well without much customization.
-The only tricky bit is that Cypress will install its large-ish binary to
-`~/.cache/Cypress`, so if you cache your dependencies, you'll want to include
-that path:
-
-```yml
-version: 2
-jobs:
-  build:
-    docker:
-      - image: circleci/ruby:2.6-node-browsers
-      - image: circleci/postgres:9.4.12-alpine
-        environment:
-          POSTGRES_USER: circleci
-    steps:
-      - checkout
-
-      # Bundle install dependencies
-      - type: cache-restore
-        key: v1-gems-{{ checksum "Gemfile.lock" }}
-
-      - run: bundle install --path vendor/bundle
-
-      - type: cache-save
-        key: v1-gems-{{ checksum "Gemfile.lock" }}
-        paths:
-          - vendor/bundle
-
-      # Yarn dependencies
-      - restore_cache:
-          keys:
-            - v1-yarn-{{ checksum "yarn.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-yarn-
-
-      - run: yarn install
-
-      - save_cache:
-          paths:
-            - node_modules
-            - ~/.cache
-          key: v1-yarn-{{ checksum "yarn.lock" }}
-
-      # Run your cypress tests
-      - run: bin/rake cypress:run
 ```
 
 ## Why use this?
