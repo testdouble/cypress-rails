@@ -179,14 +179,14 @@ A few things to watch out for:
   transaction on one of the server's database connections, so requests served
   on other connections save their changes for real, and those changes survive
   the reset. (On SQLite, the open transaction also makes other connections'
-  writes fail with "database is locked" errors.)
+  writes fail with "database is locked" errors)
 * Don't set `DatabaseCleaner.strategy = ...` at the top of an initializer.
   Before ActiveRecord has loaded, that assignment is silently ignored and
-  database_cleaner's default `:transaction` strategy is used instead.
+  database_cleaner's default `:transaction` strategy is used instead
 * Truncation removes everything, including data loaded in
   `before_server_start`, so rebuild whatever your tests need in the hook. Call
   `ActiveRecord::FixtureSet.reset_cache` before reloading fixtures, or they'll
-  be skipped as already loaded.
+  be skipped as already loaded
 
 ## Configuration
 
